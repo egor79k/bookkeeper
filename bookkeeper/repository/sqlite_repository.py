@@ -17,14 +17,19 @@ class SQLiteRepository(AbstractRepository[T]):
     """
 
     def __init__(self, cls_type: type[T]) -> None:
+        self._connection = sqlite3.connect('bookkeeper.db')
+        self._cursor = self._connection.cursor()
+        
         if not hasattr(cls_type, 'pk'):
             raise ValueError("Trying to create SQLiteRepository over class without 'pk' field")
+        
         self._cls_type = cls_type
         self._table_name = cls_type.__name__.lower()
         self._attributes = list(cls_type.__annotations__.keys())
         self._attributes.remove('pk')
-        self._connection = sqlite3.connect('bookkeeper.db')
-        self._cursor = self._connection.cursor()
+        
+        if len(self._attributes) < 1:
+            raise ValueError("Trying to create SQLiteRepository over class with only 'pk' field")
 
         annot_type_to_sql = {
             int: 'INTEGER',
@@ -35,7 +40,6 @@ class SQLiteRepository(AbstractRepository[T]):
             datetime | None: 'DATETIME'
         }
         fields = ', '.join([name + ' ' + annot_type_to_sql[tp] for name, tp in cls_type.__annotations__.items() if name != 'pk'])
-        print(f'CREATE TABLE IF NOT EXISTS {self._table_name} (pk INTEGER PRIMARY KEY, {fields})')
 
         self._cursor.execute(f'CREATE TABLE IF NOT EXISTS {self._table_name} (pk INTEGER PRIMARY KEY, {fields})')
         self._connection.commit()
@@ -45,6 +49,9 @@ class SQLiteRepository(AbstractRepository[T]):
         self._connection.close()
 
     def tuple_to_object(self, values: list) -> T:
+        if values is None:
+            return None
+
         obj = self._cls_type()
         obj.pk = values[0]
         for attr, val in zip(self._attributes, values[1:]):
@@ -87,12 +94,16 @@ class SQLiteRepository(AbstractRepository[T]):
         
     def update(self, obj: T) -> None:
         if obj.pk == 0:
-            raise ValueError('attempt to update object with unknown primary key')
+            raise ValueError('Attempt to update object with unknown primary key')
 
         fields = ', '.join([attr + ' = ?' for attr in self._attributes])
         values = [getattr(obj, attr) for attr in self._attributes]
         values.append(obj.pk)
         self._cursor.execute(f'UPDATE {self._table_name} SET {fields} WHERE pk = ?', values)
+        self._connection.commit()
 
     def delete(self, pk: int) -> None:
         self._cursor.execute(f'DELETE FROM {self._table_name} WHERE pk = ?', [pk])
+        if self._cursor.rowcount == 0:
+            raise KeyError('Trying to delete unexisting object')
+        self._connection.commit()
