@@ -30,15 +30,15 @@ products
 books
 clothes
 '''.splitlines()
-from inspect import get_annotations
-Category.create_from_tree(read_tree(cats), cat_repo)
+# from inspect import get_annotations
+# Category.create_from_tree(read_tree(cats), cat_repo)
 
 # print(Category('test', None, 2) == Category('test', None, 2))
 # print(Category('test', None, 2) == Category('tes', None, 2))
-exp = Expense(10, 2)
-pk = exp_repo.add(exp)
-exp1 = exp_repo.get(pk)
-print(exp == exp1)
+# exp = Expense(10, 2)
+# pk = exp_repo.add(exp)
+# exp1 = exp_repo.get(pk)
+# print(exp == exp1)
 
 while True:
     try:

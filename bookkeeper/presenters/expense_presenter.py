@@ -7,6 +7,6 @@ class ExpensePresenter:
         self.repo = SQLiteRepository[Expense](Expense)
 
 
-    def add_expense(self, expense: Expense) -> None:
+    def add(self, expense: Expense) -> None:
         print('Adding expense with amount:', expense.amount)
         self.repo.add(expense)

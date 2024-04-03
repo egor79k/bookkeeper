@@ -46,10 +46,16 @@ class ExpenseView(QtWidgets.QVBoxLayout):
     def add_expense(self, expense: Expense) -> None:
         row = self.table.rowCount()
         self.table.insertRow(row)
-        self.table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(expense.expense_date)))
+        self.table.setItem(row, 0, QtWidgets.QTableWidgetItem(expense.expense_date.strftime('%Y-%m-%d %H:%M:%S')))
         self.table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(expense.amount)))
         self.table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(expense.category)))
         self.table.setItem(row, 3, QtWidgets.QTableWidgetItem(expense.comment))
+
+
+    def update_table(self) -> None:
+        expenses = self.expense_presenter.get_all() # NOT IMPLEMENTED
+        for exp in expenses:
+            self.add_expense(exp)
 
 
     @Slot()
@@ -68,11 +74,12 @@ class ExpenseView(QtWidgets.QVBoxLayout):
         print(amount)
         category_pk = self.category_presenter.find_by_name(self.category_input.currentText())
         expense = Expense(amount, category_pk)
-        self.expense_presenter.add_expense(expense)
+        self.expense_presenter.add(expense)
         self.add_expense(expense)
 
 
     @Slot()
     def on_delete_button_clicked(self) -> None:
         print('Delete button clicked')
+        self.expense_presenter.delete_by_order(self.table.currentRow()) # NOT IMPLEMENTED
         exp = Expense()
