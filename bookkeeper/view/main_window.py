@@ -4,13 +4,13 @@ from PySide6.QtWidgets import QMainWindow
 from bookkeeper.models.category import Category
 from bookkeeper.models.expense import Expense
 from bookkeeper.repository.sqlite_repository import SQLiteRepository
-from bookkeeper.view.expense_view import ExpenseView
 from bookkeeper.view.budget_view import BudgetView
+from bookkeeper.view.expense_view import ExpenseView
 from bookkeeper.view.category_view import CategoryView
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, cat_view, exp_view, bgt_view):
         super().__init__()
         self.setWindowTitle('Bookkeeper')
         self.resize(800, 600)
@@ -22,15 +22,16 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(horizontal_layout)
         vertical_layout = QtWidgets.QVBoxLayout()
         horizontal_layout.addLayout(vertical_layout, 3)
+
+        self.cat_view = cat_view
+        horizontal_layout.addLayout(self.cat_view.get_layout())
         
-        self.expense_view = ExpenseView()
-        vertical_layout.addLayout(self.expense_view, 11)
+        self.exp_view = exp_view
+        vertical_layout.addLayout(self.exp_view.get_layout(), 11)
+        # self.cat_view.category_added.connect(self.exp_view.on_category_added)
 
-        self.budget_view = BudgetView()
-        vertical_layout.addLayout(self.budget_view, 4)
-
-        self.category_view = CategoryView()
-        horizontal_layout.addLayout(self.category_view)
+        self.bgt_view = bgt_view
+        vertical_layout.addLayout(self.bgt_view.get_layout(), 4)
         
         # vertical_layout.addWidget(QtWidgets.QLabel('Last expenses'))
 

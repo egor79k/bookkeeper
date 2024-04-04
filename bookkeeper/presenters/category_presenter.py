@@ -3,8 +3,8 @@ from bookkeeper.repository.sqlite_repository import SQLiteRepository
 
 
 class CategoryPresenter:
-    def __init__(self):
-        self.repo = SQLiteRepository[Category](Category)
+    def __init__(self, cat_view, cat_repo):
+        self.repo = cat_repo
 
 
     def find_by_name(self, name: str) -> int | None:

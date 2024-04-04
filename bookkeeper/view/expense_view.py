@@ -1,20 +1,27 @@
 from PySide6 import QtWidgets
 from PySide6.QtCore import Slot
+
+from bookkeeper.models.expense import Expense
+from bookkeeper.models.category import Category
+
+from bookkeeper.view.abstract_expense_view import AbstractExpenseView
+
 from bookkeeper.presenters.expense_presenter import ExpensePresenter
 from bookkeeper.presenters.category_presenter import CategoryPresenter
-from bookkeeper.models.expense import Expense
 
 
-class ExpenseView(QtWidgets.QVBoxLayout):
+class ExpenseView(AbstractExpenseView):
     def __init__(self):
-        super().__init__()
-        self.expense_presenter = ExpensePresenter()
-        self.category_presenter = CategoryPresenter()
+        # self.exp_presenter = ExpensePresenter()
+        self.category_presenter = CategoryPresenter(None, None)
+        self.exp_row2pk = []
+        self.cat_id2pk = []
         
-        super().addWidget(QtWidgets.QLabel('Last expenses'))
+        self.vbox_layout = QtWidgets.QVBoxLayout()
+        self.vbox_layout.addWidget(QtWidgets.QLabel('Last expenses'))
 
         self.table = QtWidgets.QTableWidget(0, 4)
-        super().addWidget(self.table)
+        self.vbox_layout.addWidget(self.table)
         self.table.setHorizontalHeaderLabels("Date Summ Category Comment".split())
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
@@ -25,7 +32,7 @@ class ExpenseView(QtWidgets.QVBoxLayout):
         self.table.verticalHeader().hide()
 
         form_layout = QtWidgets.QFormLayout()
-        super().addLayout(form_layout)
+        self.vbox_layout.addLayout(form_layout)
         self.amount_input = QtWidgets.QLineEdit()
         self.category_input = QtWidgets.QComboBox()
         self.delete_button = QtWidgets.QPushButton('Delete')
@@ -34,28 +41,40 @@ class ExpenseView(QtWidgets.QVBoxLayout):
         form_layout.addRow(QtWidgets.QLabel('Category'), self.category_input)
         form_layout.addRow(self.delete_button, self.add_button)
 
+        # Connect slots to signals
         self.table.cellChanged.connect(self.on_table_cell_changed)
         self.add_button.clicked.connect(self.on_add_button_clicked)
         self.delete_button.clicked.connect(self.on_delete_button_clicked)
 
         # TEMP
         self.category_input.addItem("meat")
-        self.add_expense(Expense(1237, 1, comment='Shopping'))
+        self.add_expense(Expense(1237, 1, comment='Shopping', pk=1))
 
 
-    def add_expense(self, expense: Expense) -> None:
-        row = self.table.rowCount()
-        self.table.insertRow(row)
-        self.table.setItem(row, 0, QtWidgets.QTableWidgetItem(expense.expense_date.strftime('%Y-%m-%d %H:%M:%S')))
-        self.table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(expense.amount)))
-        self.table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(expense.category)))
-        self.table.setItem(row, 3, QtWidgets.QTableWidgetItem(expense.comment))
+    def get_layout(self) -> QtWidgets.QLayout:
+        return self.vbox_layout
 
 
-    def update_table(self) -> None:
-        expenses = self.expense_presenter.get_all() # NOT IMPLEMENTED
-        for exp in expenses:
-            self.add_expense(exp)
+    def add_expense(self, exp: Expense) -> None:
+        if exp.pk == 0:
+            raise ValueError('Trying to show object with empty `pk`')
+
+        self.exp_row2pk.insert(0, exp.pk)
+        self.table.insertRow(0)
+        self.table.setItem(0, 0, QtWidgets.QTableWidgetItem(exp.expense_date.strftime('%Y-%m-%d %H:%M:%S')))
+        self.table.setItem(0, 1, QtWidgets.QTableWidgetItem(str(exp.amount)))
+        self.table.setItem(0, 2, QtWidgets.QTableWidgetItem(str(exp.category)))
+        self.table.setItem(0, 3, QtWidgets.QTableWidgetItem(exp.comment))
+
+
+    def update_all(self, exps: list[Expense]) -> None:
+        for exp in exps:
+            self.show_expense(exp)
+
+
+    # @Slot()
+    # def on_category_added(self, cat: Category) -> None:
+    #     print("Emitted")
 
 
     @Slot()
@@ -68,18 +87,18 @@ class ExpenseView(QtWidgets.QVBoxLayout):
         print('Add button clicked')
         try:
             amount = float(self.amount_input.text())
+            self.amount_input.clear()
         except:
             return
 
-        print(amount)
-        category_pk = self.category_presenter.find_by_name(self.category_input.currentText())
-        expense = Expense(amount, category_pk)
-        self.expense_presenter.add(expense)
-        self.add_expense(expense)
+        cat_pk = self.cat_id2pk[self.category_input.currentIndex()]
+        exp = Expense(amount, cat_pk)
+        self.exp_presenter.add(exp)
+        self.show_expense(expense)
 
 
     @Slot()
     def on_delete_button_clicked(self) -> None:
         print('Delete button clicked')
-        self.expense_presenter.delete_by_order(self.table.currentRow()) # NOT IMPLEMENTED
-        exp = Expense()
+        exp_pk = self.row2pk[self.table.currentRow()]
+        self.exp_presenter.delete(exp_pk) # NOT IMPLEMENTED
