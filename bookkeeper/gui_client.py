@@ -27,7 +27,7 @@ if __name__ == "__main__":
     exp_view = ExpenseView()
     cat_view = CategoryView()
     bgt_presenter = BudgetPresenter(bgt_view, bgt_repo)
-    exp_presenter = ExpensePresenter(exp_view, exp_repo)
+    exp_presenter = ExpensePresenter(exp_view, exp_repo, cat_repo)
     cat_presenter = CategoryPresenter(cat_view, cat_repo)
     bgt_view.set_presenter(bgt_presenter)
     exp_view.set_presenter(exp_presenter)
