@@ -39,7 +39,7 @@ class SQLiteRepository(AbstractRepository[T]):
             datetime: 'DATETIME',
             datetime | None: 'DATETIME'
         }
-        fields = ', '.join([name + ' ' + annot_type_to_sql[tp] for name, tp in cls_type.__annotations__.items() if name != 'pk'])
+        fields = ', '.join(['"' + name + '"' + ' ' + annot_type_to_sql[tp] for name, tp in cls_type.__annotations__.items() if name != 'pk'])
 
         self._cursor.execute(f'CREATE TABLE IF NOT EXISTS {self._table_name} (pk INTEGER PRIMARY KEY, {fields})')
         self._connection.commit()
@@ -67,7 +67,7 @@ class SQLiteRepository(AbstractRepository[T]):
         if getattr(obj, 'pk', None) != 0:
             raise ValueError(f'Trying to add object {obj} with filled `pk` attribute')
 
-        fields = ', '.join(self._attributes)
+        fields = '"' + '", "'.join(self._attributes) + '"'
         values = [getattr(obj, attr) for attr in self._attributes]
         val_flags = '?, ' * (len(values) - 1) + '?'
         self._cursor.execute(f'INSERT INTO {self._table_name} ({fields}) VALUES ({val_flags})', values)
@@ -86,7 +86,7 @@ class SQLiteRepository(AbstractRepository[T]):
         if where is None:
             self._cursor.execute(f'SELECT * FROM {self._table_name}')
         else:
-            conditions = ', '.join([field + ' == ?' for field in where])
+            conditions = ', '.join(['"' + field + '"' + ' == ?' for field in where])
             values = list(where.values())
             self._cursor.execute(f'SELECT * FROM {self._table_name} WHERE {conditions}', values)
 
@@ -96,7 +96,7 @@ class SQLiteRepository(AbstractRepository[T]):
         if obj.pk == 0:
             raise ValueError('Attempt to update object with unknown primary key')
 
-        fields = ', '.join([attr + ' = ?' for attr in self._attributes])
+        fields = ', '.join(['"' + attr + '"' + ' = ?' for attr in self._attributes])
         values = [getattr(obj, attr) for attr in self._attributes]
         values.append(obj.pk)
         self._cursor.execute(f'UPDATE {self._table_name} SET {fields} WHERE pk = ?', values)

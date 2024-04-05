@@ -31,6 +31,8 @@ class ExpensePresenter:
             exp = exp_orig
         else:
             self.exp_repo.update(exp)
+            # if exp.expense_date != exp_orig.expense_date or exp.amount != exp_orig.amount:
+                # self.bgt_presenter.update()
             
         self.exp_view.update_expense(exp, cat.name)
 

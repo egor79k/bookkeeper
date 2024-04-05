@@ -42,8 +42,3 @@ class CategoryPresenter:
             self.exp_presenter.delete_category(pk)
         else:
             print(f"Unable to remove category. There are an expense(s) of this category.")
-
-
-    def find_by_name(self, name: str) -> int | None:
-        categories = self.cat_repo.get_all({'name': name})
-        return categories[0].pk

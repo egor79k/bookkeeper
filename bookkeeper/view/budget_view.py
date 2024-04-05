@@ -9,16 +9,17 @@ from bookkeeper.presenters.budget_presenter import BudgetPresenter
 
 class BudgetView(AbstractBudgetView):
     def __init__(self):
+        self.row2pk = []
 
         self.vbox_layout = QtWidgets.QVBoxLayout()
         self.vbox_layout.addWidget(QtWidgets.QLabel('Budget'))
 
-        budget_table = QtWidgets.QTableWidget(3, 2)
-        self.vbox_layout.addWidget(budget_table, 4)
-        # budget_table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        budget_table.setHorizontalHeaderLabels("Summ Budget".split())
-        budget_table.setVerticalHeaderLabels("Day Week Month".split())
-        header = budget_table.horizontalHeader()
+        self.table = QtWidgets.QTableWidget(3, 2)
+        self.vbox_layout.addWidget(self.table, 4)
+        # self.table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.table.setHorizontalHeaderLabels("Summ Budget".split())
+        self.table.setVerticalHeaderLabels("Day Week Month".split())
+        header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
 
@@ -27,9 +28,15 @@ class BudgetView(AbstractBudgetView):
         return self.vbox_layout
         
 
-    def add_budget(self, bgt: Budget) -> None:
-        pass
+    def add(self, bgt: Budget) -> None:
+        if bgt.pk == 0:
+            raise ValueError('Trying to show object with empty `pk`')
 
-
-    def update_all(self, bgts: list[Budget]) -> None:
-        pass
+        self.row2pk.insert(0, bgt.pk)
+        self.table.insertRow(0)
+        # self.table.setItem(0, 0, QtWidgets.QTableWidgetItem(exp.expense_date.strftime('%Y-%m-%d %H:%M')))
+        # self.table.setItem(0, 1, QtWidgets.QTableWidgetItem(str(exp.amount)))
+        # cat_item = QtWidgets.QTableWidgetItem(cat_name)
+        # cat_item.setFlags(Qt.ItemIsEnabled)
+        # self.table.setItem(0, 2, cat_item)
+        # self.table.setItem(0, 3, QtWidgets.QTableWidgetItem(exp.comment))
