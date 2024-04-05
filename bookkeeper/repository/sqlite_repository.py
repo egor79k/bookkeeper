@@ -56,7 +56,7 @@ class SQLiteRepository(AbstractRepository[T]):
         obj.pk = values[0]
         for attr, val in zip(self._attributes, values[1:]):
             if self._cls_type.__annotations__[attr] in (datetime, datetime | None) and val is not None:
-                val = datetime.strptime(val, '%Y-%m-%d %H:%M:%S.%f')
+                val = datetime.fromisoformat(val)
             setattr(obj, attr, val)
         return obj
 

@@ -21,12 +21,15 @@ class ExpensePresenter:
 
 
     def update(self, exp: Expense, restore: bool = False):
+        exp_orig = self.exp_repo.get(exp.pk)
+        cat = self.cat_repo.get(exp_orig.category)
+        exp.category = cat.pk
+
         if restore:
-            exp = self.exp_repo.get(exp.pk)
+            exp = exp_orig
         else:
             self.exp_repo.update(exp)
-
-        cat = self.cat_repo.get(exp.category)
+            
         self.exp_view.update_expense(exp, cat.name)
 
 

@@ -23,7 +23,7 @@ class ExpenseView(AbstractExpenseView):
 
         self.table = QtWidgets.QTableWidget(0, 4)
         self.vbox_layout.addWidget(self.table)
-        self.table.setHorizontalHeaderLabels("Date Summ Category Comment".split())
+        self.table.setHorizontalHeaderLabels("Date Amount Category Comment".split())
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
@@ -66,7 +66,7 @@ class ExpenseView(AbstractExpenseView):
 
         self.exp_row2pk.insert(0, exp.pk)
         self.table.insertRow(0)
-        self.table.setItem(0, 0, QtWidgets.QTableWidgetItem(exp.expense_date.strftime('%Y-%m-%d %H:%M:%S')))
+        self.table.setItem(0, 0, QtWidgets.QTableWidgetItem(exp.expense_date.strftime('%Y-%m-%d %H:%M')))
         self.table.setItem(0, 1, QtWidgets.QTableWidgetItem(str(exp.amount)))
         cat_item = QtWidgets.QTableWidgetItem(cat_name)
         cat_item.setFlags(Qt.ItemIsEnabled)
@@ -76,7 +76,7 @@ class ExpenseView(AbstractExpenseView):
 
     def update_expense(self, exp: Expense, cat_name: str) -> None:
         row = self.exp_row2pk.index(exp.pk)
-        self.table.item(row, 0).setText(exp.expense_date.strftime('%Y-%m-%d %H:%M:%S'))
+        self.table.item(row, 0).setText(exp.expense_date.strftime('%Y-%m-%d %H:%M'))
         self.table.item(row, 1).setText(str(exp.amount))
         self.table.item(row, 2).setText(cat_name)
         self.table.item(row, 3).setText(exp.comment)
@@ -94,12 +94,17 @@ class ExpenseView(AbstractExpenseView):
 
     @Slot()
     def on_table_cell_changed(self, row: int, column: int) -> None:
+        print(
+            self.table.item(row, 0).text(),
+            self.table.item(row, 1).text(),
+            self.table.item(row, 2).text(),
+            self.table.item(row, 3).text())
         restore = False
 
         # Get date from table
         try:
-            val = self.table.itemAt(row, 0).text()
-            date = datetime.strptime(val, '%Y-%m-%d %H:%M:%S')
+            val = self.table.item(row, 0).text()
+            date = datetime.fromisoformat(val)
         except:
             print('Fail date')
             date = None
@@ -107,7 +112,7 @@ class ExpenseView(AbstractExpenseView):
 
         # Get amount from table
         try:
-            val = self.table.itemAt(row, 1).text()
+            val = self.table.item(row, 1).text()
             print(val)
             amount = int(val)
         except:
@@ -116,7 +121,7 @@ class ExpenseView(AbstractExpenseView):
             restore = True
 
         # Get comment from table
-        comment = self.table.itemAt(row, 3).text()
+        comment = self.table.item(row, 3).text()
         pk = self.exp_row2pk[row]
         exp = Expense(amount, expense_date=date, comment=comment, pk=pk)
         self.exp_presenter.update(exp, restore)
