@@ -2,10 +2,12 @@
 Простой тестовый скрипт для терминала
 """
 
-from bookkeeper.models.category import Category
-from bookkeeper.models.expense import Expense
 from bookkeeper.repository.sqlite_repository import SQLiteRepository
 from bookkeeper.utils import read_tree
+
+from bookkeeper.models.expense import Expense
+from bookkeeper.models.category import Category
+
 
 cat_repo = SQLiteRepository[Category](Category)
 exp_repo = SQLiteRepository[Expense](Expense)

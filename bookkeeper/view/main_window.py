@@ -1,9 +1,11 @@
 from PySide6 import QtWidgets, QtCore
 from PySide6.QtWidgets import QMainWindow
 
+from bookkeeper.repository.sqlite_repository import SQLiteRepository
+
 from bookkeeper.models.category import Category
 from bookkeeper.models.expense import Expense
-from bookkeeper.repository.sqlite_repository import SQLiteRepository
+
 from bookkeeper.view.budget_view import BudgetView
 from bookkeeper.view.expense_view import ExpenseView
 from bookkeeper.view.category_view import CategoryView

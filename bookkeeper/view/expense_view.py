@@ -12,7 +12,7 @@ from bookkeeper.presenters.category_presenter import CategoryPresenter
 
 
 class ExpenseView(AbstractExpenseView):
-    def __init__(self):
+    def __init__(self) -> None:
         self.exp_row2pk = []
         self.cat_id2pk = []
         
@@ -45,7 +45,7 @@ class ExpenseView(AbstractExpenseView):
         self.delete_button.clicked.connect(self.on_delete_button_clicked)
 
 
-    def set_presenter(self, exp_presenter) -> None:
+    def set_presenter(self, exp_presenter: ExpensePresenter) -> None:
         self.exp_presenter = exp_presenter
 
         # Connect table change slot after presenter filled table

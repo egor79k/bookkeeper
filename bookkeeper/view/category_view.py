@@ -9,12 +9,7 @@ from bookkeeper.presenters.category_presenter import CategoryPresenter
 
 
 class CategoryView(AbstractCategoryView):
-    # Define signals
-    # category_added = Signal(Category)
-    # category_deleted = Signal(Category)
-
-
-    def __init__(self):
+    def __init__(self) -> None:
         self.row2pk = []
 
         self.vbox_layout = QtWidgets.QVBoxLayout()
@@ -45,19 +40,6 @@ class CategoryView(AbstractCategoryView):
         self.add_button.clicked.connect(self.on_add_button_clicked)
         self.delete_button.clicked.connect(self.on_delete_button_clicked)
 
-        # TEMP
-        # items = QtWidgets.QTreeWidgetItem()
-        # items.setText(0, "Parent")
-        # # items.addChild(QtWidgets.QTreeWidgetItem())
-        # # items.child(0).setText(0, "Child")
-        # self.tree.insertTopLevelItems(0, [items])
-
-
-    def set_presenter(self, cat_presenter: CategoryPresenter) -> None:
-        self.cat_presenter = cat_presenter
-
-        # Connect ...
-
 
     def get_layout(self) -> QtWidgets.QLayout:
         return self.vbox_layout
@@ -82,14 +64,6 @@ class CategoryView(AbstractCategoryView):
         row = self.row2pk.index(pk)
         self.row2pk.pop(row)
         self.tree.takeTopLevelItem(row)
-
-
-    def update_all(self, cats: list[Category]) -> None:
-        pass
-
-
-    def show_category(self, cat: Category) -> None:
-        pass
 
 
     @Slot()

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from bookkeeper.models.expense import Expense
-# from bookkeeper.presenters.expense_presenter import ExpensePresenter
+from bookkeeper.models.category import Category
 
 
 class AbstractExpenseView(ABC):
@@ -21,4 +21,19 @@ class AbstractExpenseView(ABC):
 
     @abstractmethod
     def delete_expense(self, pk: int) -> None:
+        '''  '''
+
+
+    @abstractmethod
+    def add_category(self, cat: Category) -> None:
+        '''  '''
+
+
+    @abstractmethod
+    def update_category(self, cat: Category) -> None:
+        '''  '''
+
+
+    @abstractmethod
+    def delete_category(self, pk: int) -> None:
         '''  '''
