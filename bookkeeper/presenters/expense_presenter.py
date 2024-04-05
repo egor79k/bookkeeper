@@ -1,4 +1,4 @@
-from bookkeeper.repository.sqlite_repository import SQLiteRepository
+from bookkeeper.repository.abstract_repository import AbstractRepository
 
 from bookkeeper.models.expense import Expense
 from bookkeeper.models.category import Category
@@ -9,7 +9,7 @@ from bookkeeper.presenters.budget_presenter import BudgetPresenter
 
 
 class ExpensePresenter:
-    def __init__(self, exp_view: AbstractExpenseView, exp_repo: SQLiteRepository[Expense], cat_repo: SQLiteRepository[Category], bgt_presenter: BudgetPresenter) -> None:
+    def __init__(self, exp_view: AbstractExpenseView, exp_repo: AbstractRepository[Expense], cat_repo: AbstractRepository[Category], bgt_presenter: BudgetPresenter) -> None:
         self.exp_view = exp_view
         self.exp_repo = exp_repo
         self.cat_repo = cat_repo

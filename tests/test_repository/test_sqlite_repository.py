@@ -1,9 +1,12 @@
+import os
 import pytest
 from datetime import datetime
 from dataclasses import dataclass, field
 
 from bookkeeper.repository.sqlite_repository import SQLiteRepository
 
+
+db_file = 'test.db'
 
 @dataclass
 class Custom():
@@ -20,7 +23,9 @@ def custom_class():
 
 @pytest.fixture
 def repo():
-    return SQLiteRepository(Custom)
+    yield SQLiteRepository(Custom, db_file)
+    os.remove(db_file)
+
 
 
 def test_init():
@@ -31,10 +36,10 @@ def test_init():
         pk: int = 0
 
     with pytest.raises(ValueError):
-        SQLiteRepository(NoPk)
+        SQLiteRepository(NoPk, db_file)
 
     with pytest.raises(ValueError):
-        SQLiteRepository(OnlyPk)
+        SQLiteRepository(OnlyPk, db_file)
 
 
 def test_crud(repo, custom_class):

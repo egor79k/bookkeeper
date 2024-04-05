@@ -1,4 +1,4 @@
-from bookkeeper.repository.sqlite_repository import SQLiteRepository
+from bookkeeper.repository.abstract_repository import AbstractRepository
 
 from bookkeeper.models.expense import Expense
 from bookkeeper.models.category import Category
@@ -9,7 +9,7 @@ from bookkeeper.presenters.expense_presenter import ExpensePresenter
 
 
 class CategoryPresenter:
-    def __init__(self, cat_view: AbstractCategoryView, cat_repo: SQLiteRepository[Category], exp_repo: SQLiteRepository[Expense], exp_presenter: ExpensePresenter) -> None:
+    def __init__(self, cat_view: AbstractCategoryView, cat_repo: AbstractRepository[Category], exp_repo: AbstractRepository[Expense], exp_presenter: ExpensePresenter) -> None:
         self.cat_repo = cat_repo
         self.cat_view = cat_view
         self.exp_repo = exp_repo
@@ -41,4 +41,4 @@ class CategoryPresenter:
             self.cat_view.delete(pk)
             self.exp_presenter.delete_category(pk)
         else:
-            print(f"Unable to remove category. There are an expense(s) of this category.")
+            print(f"Unable to remove category. There are expense(s) of this category.")

@@ -48,7 +48,7 @@ class ExpenseView(AbstractExpenseView):
     def set_presenter(self, exp_presenter: ExpensePresenter) -> None:
         self.exp_presenter = exp_presenter
 
-        # Connect table change slot after presenter filled table
+        # Connect table change slot after presenter filled it
         self.table.cellChanged.connect(self.on_table_cell_changed)
 
 
@@ -102,11 +102,6 @@ class ExpenseView(AbstractExpenseView):
 
     @Slot()
     def on_table_cell_changed(self, row: int, column: int) -> None:
-        print(
-            self.table.item(row, 0).text(),
-            self.table.item(row, 1).text(),
-            self.table.item(row, 2).text(),
-            self.table.item(row, 3).text())
         restore = False
 
         # Get date from table

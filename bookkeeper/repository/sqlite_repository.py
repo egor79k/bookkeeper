@@ -16,8 +16,8 @@ class SQLiteRepository(AbstractRepository[T]):
     Repository working with sqlite3 database
     """
 
-    def __init__(self, cls_type: type[T]) -> None:
-        self._connection = sqlite3.connect('bookkeeper.db')
+    def __init__(self, cls_type: type[T], db_file: str) -> None:
+        self._connection = sqlite3.connect(db_file)
         self._cursor = self._connection.cursor()
         
         if not hasattr(cls_type, 'pk'):

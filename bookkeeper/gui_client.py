@@ -19,10 +19,18 @@ from bookkeeper.presenters.category_presenter import CategoryPresenter
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
+    db_file = 'bookkeeper.db'
+
     # Connect MVP structure together
-    bgt_repo = SQLiteRepository[Budget](Budget)
-    exp_repo = SQLiteRepository[Expense](Expense)
-    cat_repo = SQLiteRepository[Category](Category)
+    bgt_repo = SQLiteRepository[Budget](Budget, db_file)
+    exp_repo = SQLiteRepository[Expense](Expense, db_file)
+    cat_repo = SQLiteRepository[Category](Category, db_file)
+
+    # Init budget table in case of empty database
+    for period, amount in (('month', 30000), ('week', 7000), ('day', 1000)):
+        if len(bgt_repo.get_all({'period': period})) == 0:
+            bgt_repo.add(Budget(0, amount, period))
+
     bgt_view = BudgetView()
     exp_view = ExpenseView()
     cat_view = CategoryView()

@@ -1,4 +1,5 @@
 from PySide6 import QtWidgets
+from PySide6.QtCore import Qt, Slot
 
 from bookkeeper.models.budget import Budget
 
@@ -14,14 +15,21 @@ class BudgetView(AbstractBudgetView):
         self.vbox_layout = QtWidgets.QVBoxLayout()
         self.vbox_layout.addWidget(QtWidgets.QLabel('Budget'))
 
-        self.table = QtWidgets.QTableWidget(3, 2)
+        self.table = QtWidgets.QTableWidget(0, 2)
         self.vbox_layout.addWidget(self.table, 4)
         # self.table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.table.setHorizontalHeaderLabels("Summ Budget".split())
-        self.table.setVerticalHeaderLabels("Day Week Month".split())
+        self.table.setHorizontalHeaderLabels(('Sum', 'Budget'))
+        # self.table.setVerticalHeaderLabels("Day Week Month".split())
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+
+
+    def set_presenter(self, bgt_presenter: BudgetPresenter) -> None:
+        self.bgt_presenter = bgt_presenter
+
+        # Connect table change slot after presenter filled it
+        self.table.cellChanged.connect(self.on_table_cell_changed)
 
 
     def get_layout(self) -> QtWidgets.QLayout:
@@ -34,9 +42,43 @@ class BudgetView(AbstractBudgetView):
 
         self.row2pk.insert(0, bgt.pk)
         self.table.insertRow(0)
-        # self.table.setItem(0, 0, QtWidgets.QTableWidgetItem(exp.expense_date.strftime('%Y-%m-%d %H:%M')))
-        # self.table.setItem(0, 1, QtWidgets.QTableWidgetItem(str(exp.amount)))
-        # cat_item = QtWidgets.QTableWidgetItem(cat_name)
-        # cat_item.setFlags(Qt.ItemIsEnabled)
-        # self.table.setItem(0, 2, cat_item)
-        # self.table.setItem(0, 3, QtWidgets.QTableWidgetItem(exp.comment))
+        self.table.setVerticalHeaderItem(0, QtWidgets.QTableWidgetItem(bgt.period))
+        amount_item = QtWidgets.QTableWidgetItem(str(bgt.amount))
+        amount_item.setFlags(Qt.ItemIsEnabled)
+        self.table.setItem(0, 0, amount_item)
+        self.table.setItem(0, 1, QtWidgets.QTableWidgetItem(str(bgt.limit)))
+
+
+    def update(self, bgt: Budget) -> None:
+        row = self.row2pk.index(bgt.pk)
+        self.table.setVerticalHeaderItem(row, QtWidgets.QTableWidgetItem(bgt.period))
+        self.table.item(row, 0).setText(str(bgt.amount))
+        self.table.item(row, 1).setText(str(bgt.limit))
+
+
+    @Slot()
+    def on_table_cell_changed(self, row: int, column: int) -> None:
+        restore = False
+
+        if 0 == column:
+            raise ValueError("Budget sum was changed somehow")
+
+        bgt = Budget()
+
+        # Get period from table
+        bgt.period = self.table.verticalHeaderItem(row).text()
+
+        # Get sum from table
+        bgt.amount = int(self.table.item(row, 0).text())
+
+        # Get limit from table
+        try:
+            val = self.table.item(row, 1).text()
+            bgt.limit = int(val)
+        except:
+            print(f"Unsupported limit format: '{val}'")
+            bgt.limit = None
+            restore = True
+
+        bgt.pk = self.row2pk[row]
+        self.bgt_presenter.update(bgt, restore)
