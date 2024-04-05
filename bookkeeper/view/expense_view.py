@@ -13,8 +13,6 @@ from bookkeeper.presenters.category_presenter import CategoryPresenter
 
 class ExpenseView(AbstractExpenseView):
     def __init__(self):
-        # self.exp_presenter = ExpensePresenter()
-        self.category_presenter = CategoryPresenter(None, None)
         self.exp_row2pk = []
         self.cat_id2pk = []
         
@@ -42,6 +40,10 @@ class ExpenseView(AbstractExpenseView):
         form_layout.addRow(QtWidgets.QLabel('Category'), self.category_input)
         form_layout.addRow(self.delete_button, self.add_button)
 
+        # Connect buttons' signals to slots
+        self.add_button.clicked.connect(self.on_add_button_clicked)
+        self.delete_button.clicked.connect(self.on_delete_button_clicked)
+
         # TEMP
         self.category_input.addItem("meat")
         self.cat_id2pk = [1]
@@ -50,10 +52,8 @@ class ExpenseView(AbstractExpenseView):
     def set_presenter(self, exp_presenter) -> None:
         self.exp_presenter = exp_presenter
 
-        # Connect slots to signals after presenter filled table
+        # Connect table change slot after presenter filled table
         self.table.cellChanged.connect(self.on_table_cell_changed)
-        self.add_button.clicked.connect(self.on_add_button_clicked)
-        self.delete_button.clicked.connect(self.on_delete_button_clicked)
 
 
     def get_layout(self) -> QtWidgets.QLayout:
@@ -106,7 +106,7 @@ class ExpenseView(AbstractExpenseView):
             val = self.table.item(row, 0).text()
             date = datetime.fromisoformat(val)
         except:
-            print('Fail date')
+            print(f"Unsupported date format: '{val}'")
             date = None
             restore = True
 
@@ -116,7 +116,7 @@ class ExpenseView(AbstractExpenseView):
             print(val)
             amount = int(val)
         except:
-            print('Fail amount', val)
+            print(f"Unsupported amount format: '{val}'")
             amount = None
             restore = True
 
@@ -129,7 +129,6 @@ class ExpenseView(AbstractExpenseView):
 
     @Slot()
     def on_add_button_clicked(self) -> None:
-        print('Add button clicked')
         try:
             amount = int(self.amount_input.text())
             self.amount_input.clear()
@@ -143,6 +142,5 @@ class ExpenseView(AbstractExpenseView):
 
     @Slot()
     def on_delete_button_clicked(self) -> None:
-        print('Delete button clicked')
         exp_pk = self.exp_row2pk[self.table.currentRow()]
         self.exp_presenter.delete(exp_pk)

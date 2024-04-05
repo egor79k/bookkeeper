@@ -10,7 +10,7 @@ class AbstractCategoryView(ABC):
 
 
     @abstractmethod
-    def add_category(self, cat: Category) -> None:
+    def add(self, cat: Category) -> None:
         '''  '''
 
 
