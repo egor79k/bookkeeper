@@ -15,5 +15,10 @@ class AbstractCategoryView(ABC):
 
 
     @abstractmethod
+    def update(self, cat: Category) -> None:
+        '''  '''
+
+
+    @abstractmethod
     def update_all(self, cats: list[Category]) -> None:
         '''  '''

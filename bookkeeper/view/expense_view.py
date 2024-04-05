@@ -44,10 +44,6 @@ class ExpenseView(AbstractExpenseView):
         self.add_button.clicked.connect(self.on_add_button_clicked)
         self.delete_button.clicked.connect(self.on_delete_button_clicked)
 
-        # TEMP
-        self.category_input.addItem("meat")
-        self.cat_id2pk = [1]
-
 
     def set_presenter(self, exp_presenter) -> None:
         self.exp_presenter = exp_presenter
@@ -88,8 +84,14 @@ class ExpenseView(AbstractExpenseView):
         self.table.removeRow(row)
 
 
-    def update_all(self, exps: list[Expense]) -> None:
-        pass
+    def add_category(self, cat: Category) -> None:
+        self.cat_id2pk.append(cat.pk)
+        self.category_input.addItem(cat.name)
+
+
+    def update_category(self, cat: Category) -> None:
+        index = self.cat_id2pk.index(cat.pk)
+        self.category_input.setItemText(index, cat.name)
 
 
     @Slot()

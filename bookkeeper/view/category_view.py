@@ -74,6 +74,10 @@ class CategoryView(AbstractCategoryView):
         self.tree.addTopLevelItem(item)
 
 
+    def update(self, cat: Category) -> None:
+        self.current_editable_item.setText(0, cat.name)
+
+
     def update_all(self, cats: list[Category]) -> None:
         pass
 
@@ -92,9 +96,11 @@ class CategoryView(AbstractCategoryView):
     @Slot()
     def on_edit_name_input_return_pressed(self) -> None:
         new_name = self.edit_name_input.text()
-        self.current_editable_item.setText(0, new_name)
         self.edit_name_input.clear()
         self.edit_name_input.setEnabled(False)
+        row = self.tree.indexOfTopLevelItem(self.current_editable_item)
+        pk = self.row2pk[row]
+        self.cat_presenter.update(Category(name=new_name, parent=None, pk=pk))
 
 
 

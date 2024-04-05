@@ -36,3 +36,15 @@ class ExpensePresenter:
     def delete(self, pk: int) -> None:
         self.exp_repo.delete(pk)
         self.exp_view.delete_expense(pk)
+
+
+    def add_category(self, cat: Category) -> None:
+        self.exp_view.add_category(cat)
+
+
+    def update_category(self, cat: Category):
+        self.exp_view.update_category(cat)
+
+
+    def delete_category(self, pk: int) -> None:
+        pass

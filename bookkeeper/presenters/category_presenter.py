@@ -3,16 +3,25 @@ from bookkeeper.repository.sqlite_repository import SQLiteRepository
 
 
 class CategoryPresenter:
-    def __init__(self, cat_view, cat_repo):
+    def __init__(self, cat_view, cat_repo, exp_presenter):
         self.cat_repo = cat_repo
         self.cat_view = cat_view
+        self.exp_presenter = exp_presenter
         for cat in self.cat_repo.get_all():
             self.cat_view.add(cat)
+            self.exp_presenter.add_category(cat)
 
 
     def add(self, cat: Category) -> None:
         self.cat_repo.add(cat)
         self.cat_view.add(cat)
+        self.exp_presenter.add_category(cat)
+
+
+    def update(self, cat: Category) -> None:
+        self.cat_repo.update(cat)
+        self.cat_view.update(cat)
+        self.exp_presenter.update_category(cat)
 
 
     def find_by_name(self, name: str) -> int | None:
