@@ -78,6 +78,12 @@ class CategoryView(AbstractCategoryView):
         self.current_editable_item.setText(0, cat.name)
 
 
+    def delete(self, pk: int) -> None:
+        row = self.row2pk.index(pk)
+        self.row2pk.pop(row)
+        self.tree.takeTopLevelItem(row)
+
+
     def update_all(self, cats: list[Category]) -> None:
         pass
 
@@ -103,20 +109,17 @@ class CategoryView(AbstractCategoryView):
         self.cat_presenter.update(Category(name=new_name, parent=None, pk=pk))
 
 
-
     @Slot()
     def on_add_button_clicked(self) -> None:
         name = self.name_input.text()
         self.name_input.clear()
         cat = Category(name)
-        self.category_presenter.add(cat)
+        self.cat_presenter.add(cat)
 
-        # self.show_category(cat)
-
-        # self.category_added.emit(cat)
-        
         
     @Slot()
     def on_delete_button_clicked(self) -> None:
-        print('Delete button clicked')
+        row = self.tree.indexOfTopLevelItem(self.tree.selectedItems()[0])
+        pk = self.row2pk[row]
+        self.cat_presenter.delete(pk)
         

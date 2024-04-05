@@ -94,6 +94,12 @@ class ExpenseView(AbstractExpenseView):
         self.category_input.setItemText(index, cat.name)
 
 
+    def delete_category(self, pk: int) -> None:
+        index = self.cat_id2pk.index(pk)
+        self.cat_id2pk.pop(index)
+        self.category_input.removeItem(index)
+
+
     @Slot()
     def on_table_cell_changed(self, row: int, column: int) -> None:
         print(

@@ -10,12 +10,13 @@ from bookkeeper.utils import read_tree
 cat_repo = SQLiteRepository[Category](Category)
 exp_repo = SQLiteRepository[Expense](Expense)
 
+# Subcategories are not supported now
 cats = '''
 products
-    meat
-        raw meat
-        meat products
-    sweets
+meat
+raw meat
+meat products
+sweets
 books
 clothes
 '''.splitlines()

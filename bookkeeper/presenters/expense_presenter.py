@@ -47,4 +47,4 @@ class ExpensePresenter:
 
 
     def delete_category(self, pk: int) -> None:
-        pass
+        self.exp_view.delete_category(pk)
