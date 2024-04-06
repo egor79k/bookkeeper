@@ -4,12 +4,8 @@ from bookkeeper.repository.abstract_repository import AbstractRepository
 
 from bookkeeper.models.budget import Budget
 from bookkeeper.models.expense import Expense
-# from bookkeeper.models.category import Category
 
 from bookkeeper.view.abstract_budget_view import AbstractBudgetView
-
-# from bookkeeper.presenters.expense_presenter import ExpensePresenter
-# from bookkeeper.presenters.category_presenter import CategoryPresenter
 
 
 class BudgetPresenter:
@@ -58,13 +54,19 @@ class BudgetPresenter:
 
 
     def update(self, bgt: Budget, restore: bool = False):
+        if bgt.pk == 0:
+            raise ValueError('Trying to update object with empty `pk`')
+
         bgt_orig = self.bgt_repo.get(bgt.pk)
+
+        if bgt_orig is None:
+            raise ValueError('Trying to update object not from repository')
 
         if restore:
             bgt = bgt_orig
         else:
-            bgt.amount = bgt_orig.amount
-            bgt.period = bgt_orig.period
+            # bgt.amount = bgt_orig.amount
+            # bgt.period = bgt_orig.period
             self.bgt_repo.update(bgt)
             
         self.bgt_view.update(bgt)
