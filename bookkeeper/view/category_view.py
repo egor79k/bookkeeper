@@ -66,6 +66,13 @@ class CategoryView(AbstractCategoryView):
         self.tree.takeTopLevelItem(row)
 
 
+    def warning(self, msg: str) -> None:
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setWindowTitle("Category warning")
+        msg_box.setText(msg)
+        msg_box.exec()
+
+
     @Slot()
     def on_item_double_clicked(self, item: QtWidgets.QTreeWidgetItem, column: int):
         self.edit_name_input.setEnabled(True)

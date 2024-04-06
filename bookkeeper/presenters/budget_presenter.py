@@ -44,11 +44,17 @@ class BudgetPresenter:
     def calculate_all(self) -> None:
         exps = self.exp_repo.get_all()
         bgts = self.bgt_repo.get_all()
+        exceeding = []
 
         for bgt in bgts:
             self.calculate_one(bgt, exps)
             self.bgt_repo.update(bgt)
             self.bgt_view.update(bgt)
+            if bgt.amount > bgt.limit:
+                exceeding.append(bgt)
+
+        if len(exceeding) > 0:
+            self.bgt_view.handle_exceeding(exceeding)
 
 
     def update(self, bgt: Budget, restore: bool = False):
@@ -62,3 +68,6 @@ class BudgetPresenter:
             self.bgt_repo.update(bgt)
             
         self.bgt_view.update(bgt)
+        
+        if bgt.amount > bgt.limit:
+            self.bgt_view.handle_exceeding([bgt])

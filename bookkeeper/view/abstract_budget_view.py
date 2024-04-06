@@ -16,3 +16,8 @@ class AbstractBudgetView(ABC):
     @abstractmethod
     def update(self, bgt: Budget) -> None:
         '''  '''
+
+
+    @abstractmethod
+    def handle_exceeding(self, bgts: list[Budget]) -> None:
+        '''  '''

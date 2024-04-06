@@ -1,4 +1,4 @@
-from PySide6 import QtWidgets
+from PySide6 import QtWidgets, QtGui
 from PySide6.QtCore import Qt, Slot
 
 from bookkeeper.models.budget import Budget
@@ -11,6 +11,8 @@ from bookkeeper.presenters.budget_presenter import BudgetPresenter
 class BudgetView(AbstractBudgetView):
     def __init__(self):
         self.row2pk = []
+
+        self.exceeding_brush = QtGui.QBrush(QtGui.QColor('DarkRed'))
 
         self.vbox_layout = QtWidgets.QVBoxLayout()
         self.vbox_layout.addWidget(QtWidgets.QLabel('Budget'))
@@ -44,7 +46,7 @@ class BudgetView(AbstractBudgetView):
         amount_item.setFlags(Qt.ItemIsEnabled)
         self.table.setItem(0, 0, amount_item)
         self.table.setItem(0, 1, QtWidgets.QTableWidgetItem(str(bgt.limit)))
-        self.table.blockSignals(True)
+        self.table.blockSignals(False)
 
 
     def update(self, bgt: Budget) -> None:
@@ -53,9 +55,34 @@ class BudgetView(AbstractBudgetView):
         except:
             raise ValueError('Trying to update budget unfamiliar to view')
 
+        self.table.blockSignals(True)
         self.table.setVerticalHeaderItem(row, QtWidgets.QTableWidgetItem(bgt.period))
-        self.table.item(row, 0).setText(str(bgt.amount))
-        self.table.item(row, 1).setText(str(bgt.limit))
+        item = self.table.item(row, 0)
+        item.setText(str(bgt.amount))
+        item.setData(Qt.BackgroundRole, None)
+        item = self.table.item(row, 1)
+        item.setText(str(bgt.limit))
+        item.setData(Qt.BackgroundRole, None)
+        self.table.blockSignals(False)
+
+
+    def handle_exceeding(self, bgts: list[Budget]) -> None:
+        self.table.blockSignals(True)
+        for bgt in bgts:
+            try:
+                row = self.row2pk.index(bgt.pk)
+            except:
+                raise ValueError('Trying to handle exceeding budget unfamiliar to view')
+
+            self.table.item(row, 0).setBackground(self.exceeding_brush)
+            self.table.item(row, 1).setBackground(self.exceeding_brush)
+        self.table.blockSignals(False)
+
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setWindowTitle("Budget warning")
+        periods = [bgt.period for bgt in bgts]
+        msg_box.setText("Budget was exceeded for " + ", ".join(periods))
+        msg_box.exec()
 
 
     @Slot()

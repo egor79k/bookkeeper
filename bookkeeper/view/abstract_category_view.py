@@ -21,3 +21,8 @@ class AbstractCategoryView(ABC):
     @abstractmethod
     def delete(self, pk: int) -> None:
         '''  '''
+
+
+    @abstractmethod
+    def warning(self, msg: str) -> None:
+        '''  '''
