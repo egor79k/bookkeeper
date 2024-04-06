@@ -1,5 +1,6 @@
+''' Main script running the GUI version '''
 import sys
-from PySide6.QtWidgets import QApplication
+from PySide6 import QtWidgets
 
 from bookkeeper.repository.sqlite_repository import SQLiteRepository
 
@@ -17,14 +18,14 @@ from bookkeeper.presenters.expense_presenter import ExpensePresenter
 from bookkeeper.presenters.category_presenter import CategoryPresenter
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
-    db_file = 'bookkeeper.db'
+    DB_FILE = 'bookkeeper.db'
 
     # Connect MVP structure together
-    bgt_repo = SQLiteRepository[Budget](Budget, db_file)
-    exp_repo = SQLiteRepository[Expense](Expense, db_file)
-    cat_repo = SQLiteRepository[Category](Category, db_file)
+    bgt_repo = SQLiteRepository[Budget](Budget, DB_FILE)
+    exp_repo = SQLiteRepository[Expense](Expense, DB_FILE)
+    cat_repo = SQLiteRepository[Category](Category, DB_FILE)
 
     # Init budget table in case of empty database
     for period, amount in (('month', 30000), ('week', 7000), ('day', 1000)):

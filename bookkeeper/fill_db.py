@@ -1,6 +1,4 @@
-"""
-Script for example filling of empty database
-"""
+""" Script for example filling of empty database """
 from datetime import datetime, timedelta
 
 from bookkeeper.repository.sqlite_repository import SQLiteRepository
@@ -11,11 +9,11 @@ from bookkeeper.models.expense import Expense
 from bookkeeper.models.category import Category
 
 
-db_file = 'bookkeeper.db'
+DB_FILE = 'bookkeeper.db'
 
-bgt_repo = SQLiteRepository[Budget](Budget, db_file)
-exp_repo = SQLiteRepository[Expense](Expense, db_file)
-cat_repo = SQLiteRepository[Category](Category, db_file)
+bgt_repo = SQLiteRepository[Budget](Budget, DB_FILE)
+exp_repo = SQLiteRepository[Expense](Expense, DB_FILE)
+cat_repo = SQLiteRepository[Category](Category, DB_FILE)
 
 # Subcategories are not supported now
 cats = '''
@@ -46,6 +44,7 @@ Stationery
 Category.create_from_tree(read_tree(cats), cat_repo)
 
 def get_cat_pk(name: str) -> int:
+    ''' Returns category pk by name '''
     return cat_repo.get_all({'name': name})[0].pk
 
 exps_data = (

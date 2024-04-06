@@ -1,27 +1,14 @@
-"""
-Простой тестовый скрипт для терминала
-"""
+""" Simple test script for terminal """
 
 from bookkeeper.models.category import Category
 from bookkeeper.models.expense import Expense
-# from bookkeeper.repository.memory_repository import MemoryRepository
 from bookkeeper.repository.sqlite_repository import SQLiteRepository
 from bookkeeper.utils import read_tree
 
-db_file = 'bookkeeper.db'
+DB_FILE = 'bookkeeper.db'
 
-cat_repo = SQLiteRepository[Category](Category, db_file)
-exp_repo = SQLiteRepository[Expense](Expense, db_file)
-
-# cat_repo = SQLiteRepository[Category]('category',
-#     ('name', 'parent'),
-#     ('TEXT NOT NULL', 'INTEGER'),
-#     ('FOREIGN KEY(parent) REFERENCES category(pk)'))
-
-# exp_repo = SQLiteRepository[Expense]('expense',
-#     ('amount', 'category', 'expense_date', 'added_date', 'comment'),
-#     ('INTEGER NOT NULL', 'INTEGER', 'DATETIME', 'DATETIME', 'TEXT'),
-#     ('FOREIGN KEY(category) REFERENCES category(pk)'))
+cat_repo = SQLiteRepository[Category](Category, DB_FILE)
+exp_repo = SQLiteRepository[Expense](Expense, DB_FILE)
 
 cats = '''
 products
@@ -32,15 +19,8 @@ products
 books
 clothes
 '''.splitlines()
-# from inspect import get_annotations
-# Category.create_from_tree(read_tree(cats), cat_repo)
 
-# print(Category('test', None, 2) == Category('test', None, 2))
-# print(Category('test', None, 2) == Category('tes', None, 2))
-# exp = Expense(10, 2)
-# pk = exp_repo.add(exp)
-# exp1 = exp_repo.get(pk)
-# print(exp == exp1)
+Category.create_from_tree(read_tree(cats), cat_repo)
 
 while True:
     try:
