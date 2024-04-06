@@ -1,6 +1,4 @@
-"""
-Описан класс, представляющий расходную операцию
-"""
+""" Contains class representing expense operation """
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -9,13 +7,15 @@ from datetime import datetime
 @dataclass(slots=True)
 class Expense:
     """
-    Расходная операция.
-    amount - сумма
-    category - id категории расходов
-    expense_date - дата расхода
-    added_date - дата добавления в бд
-    comment - комментарий
-    pk - id записи в базе данных
+    Expense operation.
+
+    Attributes:
+        amount       - expense cost
+        category     - id of expense category (foreign key)
+        expense_date - expense date
+        added_date   - adding to database date
+        comment      - comment
+        pk           - id in database (primary key)
     """
     amount: int = 0
     category: int = 0

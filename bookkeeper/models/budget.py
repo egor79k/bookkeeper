@@ -1,19 +1,18 @@
-"""
-Описан класс, представляющий бюджет на определенный срок
-"""
+""" Contains class representing budget for a specific period """
 
-from dataclasses import dataclass, field
-from datetime import datetime
+from dataclasses import dataclass
 
 
 @dataclass(slots=True)
 class Budget:
     """
-    amount - сумма
-    expense_date - дата расхода
-    added_date - дата добавления в бд
-    comment - комментарий
-    pk - id записи в базе данных
+    Budget for a specific period.
+
+    Attributes:
+        amount - sum of all expenses in chosen period
+        limit  - max allowed sum of expenses for chosen period
+        period - name of time period
+        pk     - id in database (primary key)
     """
     amount: int = 0
     limit: int = 0

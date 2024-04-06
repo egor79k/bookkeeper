@@ -1,4 +1,4 @@
-""" Expenses' category model """
+""" Contains class representing expenses' category model """
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Iterator
@@ -14,7 +14,7 @@ class Category:
     Attributes:
         name   - name of category
         parent - link to a parent category (foreign key). For top level categories parent=None
-        pk     - primary key in repository
+        pk     - id in database (primary key)
     """
 
     name: str = ''
