@@ -29,6 +29,10 @@ class ExpensePresenter:
 
     def update(self, exp: Expense, restore: bool = False):
         exp_orig = self.exp_repo.get(exp.pk)
+        
+        if exp_orig is None:
+            raise ValueError('Trying to update unexisting expense')
+
         cat = self.cat_repo.get(exp_orig.category)
         exp.category = cat.pk
 
