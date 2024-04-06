@@ -12,6 +12,9 @@ from bookkeeper.presenters.category_presenter import CategoryPresenter
 
 
 class ExpenseView(AbstractExpenseView):
+    exp_row2pk: list[int]
+    cat_id2pk: list[int]
+
     def __init__(self) -> None:
         self.exp_row2pk = []
         self.cat_id2pk = []
@@ -106,7 +109,7 @@ class ExpenseView(AbstractExpenseView):
             date = datetime.fromisoformat(val)
         except:
             print(f"Unsupported date format: '{val}'")
-            date = None
+            date = datetime.now()
             restore = True
 
         # Get amount from table
@@ -115,7 +118,7 @@ class ExpenseView(AbstractExpenseView):
             amount = int(val)
         except:
             print(f"Unsupported amount format: '{val}'")
-            amount = None
+            amount = 0
             restore = True
 
         # Get comment from table

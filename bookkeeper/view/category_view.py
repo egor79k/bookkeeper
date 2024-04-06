@@ -9,6 +9,8 @@ from bookkeeper.presenters.category_presenter import CategoryPresenter
 
 
 class CategoryView(AbstractCategoryView):
+    row2pk: list[int]
+
     def __init__(self) -> None:
         self.row2pk = []
 
@@ -20,7 +22,7 @@ class CategoryView(AbstractCategoryView):
         self.tree.setColumnCount(1)
         self.tree.setHeaderLabels(["Name"])
 
-        self.current_editable_item = None
+        self.current_editable_item = QtWidgets.QTreeWidgetItem()
         form_layout = QtWidgets.QFormLayout()
         self.vbox_layout.addLayout(form_layout)
         self.edit_name_input = QtWidgets.QLineEdit()
@@ -74,7 +76,7 @@ class CategoryView(AbstractCategoryView):
 
 
     @Slot()
-    def on_item_double_clicked(self, item: QtWidgets.QTreeWidgetItem, column: int):
+    def on_item_double_clicked(self, item: QtWidgets.QTreeWidgetItem, column: int) -> None:
         self.edit_name_input.setEnabled(True)
         self.edit_name_input.setText(item.text(0))
         self.current_editable_item = item

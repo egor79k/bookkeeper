@@ -9,7 +9,9 @@ from bookkeeper.presenters.budget_presenter import BudgetPresenter
 
 
 class BudgetView(AbstractBudgetView):
-    def __init__(self):
+    row2pk: list[int]
+
+    def __init__(self) -> None:
         self.row2pk = []
 
         self.exceeding_brush = QtGui.QBrush(QtGui.QColor('DarkRed'))
@@ -103,7 +105,7 @@ class BudgetView(AbstractBudgetView):
             bgt.limit = int(val)
         except:
             print(f"Unsupported limit format: '{val}'")
-            bgt.limit = None
+            bgt.limit = 0
             restore = True
 
         bgt.pk = self.row2pk[row]

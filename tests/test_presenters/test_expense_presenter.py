@@ -91,6 +91,18 @@ def test_init(exp_view, exp_repo, cat_repo, bgt_presenter):
     # Check all expenses were added to view
     assert exp_view.added_exps == exps
 
+    # Check on unexisting category
+    exp = Expense(300, 3)
+
+    with pytest.raises(ValueError):
+        p.add(exp)
+
+    with pytest.raises(ValueError):
+        p.update(exp)
+
+    with pytest.raises(ValueError):
+        ExpensePresenter(exp_view, exp_repo, cat_repo, bgt_presenter)
+
 
 def test_crud(exp_view, exp_repo, cat_repo, bgt_presenter):
     p = ExpensePresenter(exp_view, exp_repo, cat_repo, bgt_presenter)

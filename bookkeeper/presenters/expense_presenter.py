@@ -17,23 +17,29 @@ class ExpensePresenter:
 
         for exp in self.exp_repo.get_all():
             cat = self.cat_repo.get(exp.category)
+            if cat is None:
+                raise ValueError(f'Unknown category with pk {exp.category}')
             self.exp_view.add(exp, cat.name)
 
 
     def add(self, exp: Expense) -> None:
         self.exp_repo.add(exp)
         cat = self.cat_repo.get(exp.category)
+        if cat is None:
+            raise ValueError(f'Unknown category with pk {exp.category}')
         self.exp_view.add(exp, cat.name)
         self.bgt_presenter.calculate_all()
 
 
-    def update(self, exp: Expense, restore: bool = False):
+    def update(self, exp: Expense, restore: bool = False) -> None:
         exp_orig = self.exp_repo.get(exp.pk)
         
         if exp_orig is None:
             raise ValueError('Trying to update unexisting expense')
 
         cat = self.cat_repo.get(exp_orig.category)
+        if cat is None:
+            raise ValueError(f'Unknown category with pk {exp_orig.category}')
         exp.category = cat.pk
 
         if restore:

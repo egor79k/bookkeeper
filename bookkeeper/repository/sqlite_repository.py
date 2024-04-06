@@ -48,7 +48,7 @@ class SQLiteRepository(AbstractRepository[T]):
         self._connection.commit()
         self._connection.close()
 
-    def tuple_to_object(self, values: list) -> T:
+    def tuple_to_object(self, values: list[Any]) -> T:
         if values is None:
             return None
 
@@ -61,7 +61,7 @@ class SQLiteRepository(AbstractRepository[T]):
         return obj
 
 
-    def add(self, obj: T) -> int:
+    def add(self, obj: T) -> Any:
         if (type(obj) != self._cls_type):
             raise ValueError(f'Trying to add object of wrong type')
         if getattr(obj, 'pk', None) != 0:

@@ -53,7 +53,7 @@ class BudgetPresenter:
             self.bgt_view.handle_exceeding(exceeding)
 
 
-    def update(self, bgt: Budget, restore: bool = False):
+    def update(self, bgt: Budget, restore: bool = False) -> None:
         if bgt.pk == 0:
             raise ValueError('Trying to update object with empty `pk`')
 
