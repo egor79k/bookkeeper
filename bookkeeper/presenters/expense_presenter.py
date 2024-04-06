@@ -17,13 +17,13 @@ class ExpensePresenter:
 
         for exp in self.exp_repo.get_all():
             cat = self.cat_repo.get(exp.category)
-            self.exp_view.add_expense(exp, cat.name)
+            self.exp_view.add(exp, cat.name)
 
 
     def add(self, exp: Expense) -> None:
         self.exp_repo.add(exp)
         cat = self.cat_repo.get(exp.category)
-        self.exp_view.add_expense(exp, cat.name)
+        self.exp_view.add(exp, cat.name)
         self.bgt_presenter.calculate_all()
 
 
@@ -39,12 +39,12 @@ class ExpensePresenter:
             if exp.expense_date != exp_orig.expense_date or exp.amount != exp_orig.amount:
                 self.bgt_presenter.calculate_all()
             
-        self.exp_view.update_expense(exp, cat.name)
+        self.exp_view.update(exp, cat.name)
 
 
     def delete(self, pk: int) -> None:
         self.exp_repo.delete(pk)
-        self.exp_view.delete_expense(pk)
+        self.exp_view.delete(pk)
         self.bgt_presenter.calculate_all()
 
 

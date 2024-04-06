@@ -10,17 +10,17 @@ class AbstractExpenseView(ABC):
 
 
     @abstractmethod
-    def add_expense(self, exp: Expense, cat_name: str) -> None:
+    def add(self, exp: Expense, cat_name: str) -> None:
         '''  '''
 
 
     @abstractmethod
-    def update_expense(self, exp: Expense, cat_name: str) -> None:
+    def update(self, exp: Expense, cat_name: str) -> None:
         '''  '''
 
 
     @abstractmethod
-    def delete_expense(self, pk: int) -> None:
+    def delete(self, pk: int) -> None:
         '''  '''
 
 

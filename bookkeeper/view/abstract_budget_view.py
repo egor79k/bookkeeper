@@ -11,3 +11,8 @@ class AbstractBudgetView(ABC):
     @abstractmethod
     def add(self, bgt: Budget) -> None:
         '''  '''
+
+
+    @abstractmethod
+    def update(self, bgt: Budget) -> None:
+        '''  '''

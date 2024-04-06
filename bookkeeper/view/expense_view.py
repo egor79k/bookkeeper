@@ -50,7 +50,7 @@ class ExpenseView(AbstractExpenseView):
         return self.vbox_layout
 
 
-    def add_expense(self, exp: Expense, cat_name: str) -> None:
+    def add(self, exp: Expense, cat_name: str) -> None:
         if exp.pk == 0:
             raise ValueError('Trying to show object with empty `pk`')
 
@@ -66,7 +66,7 @@ class ExpenseView(AbstractExpenseView):
         self.table.blockSignals(False)
 
 
-    def update_expense(self, exp: Expense, cat_name: str) -> None:
+    def update(self, exp: Expense, cat_name: str) -> None:
         row = self.exp_row2pk.index(exp.pk)
         self.table.item(row, 0).setText(exp.expense_date.strftime('%Y-%m-%d %H:%M'))
         self.table.item(row, 1).setText(str(exp.amount))
@@ -74,7 +74,7 @@ class ExpenseView(AbstractExpenseView):
         self.table.item(row, 3).setText(exp.comment)
 
 
-    def delete_expense(self, pk: int) -> None:
+    def delete(self, pk: int) -> None:
         row = self.exp_row2pk.index(pk)
         self.exp_row2pk.pop(row)
         self.table.removeRow(row)
