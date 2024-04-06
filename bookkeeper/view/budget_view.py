@@ -48,7 +48,11 @@ class BudgetView(AbstractBudgetView):
 
 
     def update(self, bgt: Budget) -> None:
-        row = self.row2pk.index(bgt.pk)
+        try:
+            row = self.row2pk.index(bgt.pk)
+        except:
+            raise ValueError('Trying to update budget unfamiliar to view')
+
         self.table.setVerticalHeaderItem(row, QtWidgets.QTableWidgetItem(bgt.period))
         self.table.item(row, 0).setText(str(bgt.amount))
         self.table.item(row, 1).setText(str(bgt.limit))
@@ -57,9 +61,6 @@ class BudgetView(AbstractBudgetView):
     @Slot()
     def on_table_cell_changed(self, row: int, column: int) -> None:
         restore = False
-
-        if 0 == column:
-            raise ValueError("Budget sum was changed somehow")
 
         bgt = Budget()
 

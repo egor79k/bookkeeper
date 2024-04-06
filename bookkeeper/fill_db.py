@@ -1,6 +1,7 @@
 """
-Простой тестовый скрипт для терминала
+Script for example filling of empty database
 """
+from datetime import datetime, timedelta
 
 from bookkeeper.repository.sqlite_repository import SQLiteRepository
 from bookkeeper.utils import read_tree
@@ -18,23 +19,50 @@ cat_repo = SQLiteRepository[Category](Category, db_file)
 
 # Subcategories are not supported now
 cats = '''
-products
-meat
-raw meat
-meat products
-sweets
-books
-clothes
+Alcohol
+Books
+Clothes
+Electronics
+Medicines
+Products
+    Bakery
+    Dairy products
+        Cheese
+        Eggs
+        Milk
+    Fish
+    Fruits
+    Meat
+        Meat products
+        Raw meat
+    Preserves
+    Seafood
+    Sweets
+    Tea
+    Vegetables
+Stationery
 '''.splitlines()
 
 Category.create_from_tree(read_tree(cats), cat_repo)
 
-exp_repo.add(Expense(123, 2))
-exp_repo.add(Expense(199, 3, comment='Meatballs for dinner'))
-exp_repo.add(Expense(73, 4, comment='Chocolate'))
-exp_repo.add(Expense(1380, 5, comment='Russian-Chinese dictionary'))
-exp_repo.add(Expense(599, 6, comment='Bought a new shirt'))
+def get_cat_pk(name: str) -> int:
+    return cat_repo.get_all({'name': name})[0].pk
 
-bgt_repo.add(Budget(0, 30000, 'month'))
-bgt_repo.add(Budget(0, 7000, 'week'))
-bgt_repo.add(Budget(0, 1000, 'day'))
+exps_data = (
+    (80, 'Medicines', timedelta(days=2), 'Ascorbic acid'),
+    (350, 'Medicines', timedelta(days=2), 'Headache pills'),
+    (978, 'Alcohol', timedelta(hours=12), 'Payment at the bar'),
+    (199, 'Clothes', timedelta(days=1), 'Bought a new shirt'),
+    (1380, 'Books', timedelta(days=1), 'Russian-Chinese dictionary'),
+    (450, 'Raw meat', timedelta(0), 'Beef'),
+    (199, 'Meat products', timedelta(0), 'Meatballs for dinner'),
+    (73,  'Sweets', timedelta(0), 'Chocolate'),
+)
+
+# Add expenses to database
+for exp_data in exps_data:
+    exp_repo.add(Expense(
+        amount=exp_data[0],
+        category=get_cat_pk(exp_data[1]),
+        expense_date=datetime.now() - exp_data[2],
+        comment=exp_data[3]))

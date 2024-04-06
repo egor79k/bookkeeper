@@ -93,7 +93,11 @@ class CategoryView(AbstractCategoryView):
         
     @Slot()
     def on_delete_button_clicked(self) -> None:
-        row = self.tree.indexOfTopLevelItem(self.tree.selectedItems()[0])
+        items = self.tree.selectedItems()
+        if len(items) == 0:
+            return
+
+        row = self.tree.indexOfTopLevelItem(items[0])
         pk = self.row2pk[row]
         self.cat_presenter.delete(pk)
         

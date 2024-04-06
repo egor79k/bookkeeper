@@ -21,6 +21,8 @@ class BudgetPresenter:
         for bgt in self.bgt_repo.get_all():
             self.bgt_view.add(bgt)
 
+        self.calculate_all()
+
 
     def calculate_one(self, bgt: Budget, exps: list[Expense]) -> None:
         curr_dt = datetime.now()

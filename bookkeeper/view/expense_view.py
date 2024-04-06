@@ -112,7 +112,6 @@ class ExpenseView(AbstractExpenseView):
         # Get amount from table
         try:
             val = self.table.item(row, 1).text()
-            print(val)
             amount = int(val)
         except:
             print(f"Unsupported amount format: '{val}'")
@@ -141,5 +140,7 @@ class ExpenseView(AbstractExpenseView):
 
     @Slot()
     def on_delete_button_clicked(self) -> None:
-        exp_pk = self.exp_row2pk[self.table.currentRow()]
-        self.exp_presenter.delete(exp_pk)
+        rows = {index.row() for index in self.table.selectedIndexes()}
+        exp_pks = [self.exp_row2pk[row] for row in rows]
+        for exp_pk in exp_pks:
+            self.exp_presenter.delete(exp_pk)
