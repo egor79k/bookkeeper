@@ -65,11 +65,6 @@ def bgt_presenter():
     return BudgetPresenter(TestBudgetView(), MemoryRepository[Budget](), MemoryRepository[Expense]())
 
 
-@pytest.fixture
-def exp_presenter():
-    return ExpensePresenter(TestExpenseView(), MemoryRepository[Expense](), MemoryRepository[Category](), bgt_presenter)
-
-
 def test_init(exp_view, exp_repo, cat_repo, bgt_presenter):
     # Add some categories to repo
     cats = [
