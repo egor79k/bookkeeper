@@ -23,12 +23,8 @@ class BudgetView(AbstractBudgetView):
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-
-
-    def set_presenter(self, bgt_presenter: BudgetPresenter) -> None:
-        self.bgt_presenter = bgt_presenter
-
-        # Connect table change slot after presenter filled it
+        
+        # Connect signals to slots
         self.table.cellChanged.connect(self.on_table_cell_changed)
 
 
@@ -41,12 +37,14 @@ class BudgetView(AbstractBudgetView):
             raise ValueError('Trying to show object with empty `pk`')
 
         self.row2pk.insert(0, bgt.pk)
+        self.table.blockSignals(True)
         self.table.insertRow(0)
         self.table.setVerticalHeaderItem(0, QtWidgets.QTableWidgetItem(bgt.period))
         amount_item = QtWidgets.QTableWidgetItem(str(bgt.amount))
         amount_item.setFlags(Qt.ItemIsEnabled)
         self.table.setItem(0, 0, amount_item)
         self.table.setItem(0, 1, QtWidgets.QTableWidgetItem(str(bgt.limit)))
+        self.table.blockSignals(True)
 
 
     def update(self, bgt: Budget) -> None:

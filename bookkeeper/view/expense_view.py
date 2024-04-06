@@ -40,15 +40,9 @@ class ExpenseView(AbstractExpenseView):
         form_layout.addRow(QtWidgets.QLabel('Category'), self.category_input)
         form_layout.addRow(self.delete_button, self.add_button)
 
-        # Connect buttons' signals to slots
+        # Connect signals to slots
         self.add_button.clicked.connect(self.on_add_button_clicked)
         self.delete_button.clicked.connect(self.on_delete_button_clicked)
-
-
-    def set_presenter(self, exp_presenter: ExpensePresenter) -> None:
-        self.exp_presenter = exp_presenter
-
-        # Connect table change slot after presenter filled it
         self.table.cellChanged.connect(self.on_table_cell_changed)
 
 
@@ -61,6 +55,7 @@ class ExpenseView(AbstractExpenseView):
             raise ValueError('Trying to show object with empty `pk`')
 
         self.exp_row2pk.insert(0, exp.pk)
+        self.table.blockSignals(True)
         self.table.insertRow(0)
         self.table.setItem(0, 0, QtWidgets.QTableWidgetItem(exp.expense_date.strftime('%Y-%m-%d %H:%M')))
         self.table.setItem(0, 1, QtWidgets.QTableWidgetItem(str(exp.amount)))
@@ -68,6 +63,7 @@ class ExpenseView(AbstractExpenseView):
         cat_item.setFlags(Qt.ItemIsEnabled)
         self.table.setItem(0, 2, cat_item)
         self.table.setItem(0, 3, QtWidgets.QTableWidgetItem(exp.comment))
+        self.table.blockSignals(False)
 
 
     def update_expense(self, exp: Expense, cat_name: str) -> None:

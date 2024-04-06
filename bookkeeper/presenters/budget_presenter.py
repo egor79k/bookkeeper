@@ -44,7 +44,9 @@ class BudgetPresenter:
         bgts = self.bgt_repo.get_all()
 
         for bgt in bgts:
-            self.calculate_one(bgt)
+            self.calculate_one(bgt, exps)
+            self.bgt_repo.update(bgt)
+            self.bgt_view.update(bgt)
 
 
     def update(self, bgt: Budget, restore: bool = False):
