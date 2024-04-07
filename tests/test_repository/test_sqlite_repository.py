@@ -8,6 +8,7 @@ from bookkeeper.repository.sqlite_repository import SQLiteRepository
 
 db_file = 'test.db'
 
+
 @dataclass
 class Custom():
     pk: int = 0
@@ -25,7 +26,6 @@ def custom_class():
 def repo():
     yield SQLiteRepository(Custom, db_file)
     os.remove(db_file)
-
 
 
 def test_init():

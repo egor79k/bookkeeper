@@ -1,5 +1,4 @@
 import pytest
-from datetime import datetime, timedelta
 from bookkeeper.repository.memory_repository import MemoryRepository
 from bookkeeper.models.budget import Budget
 from bookkeeper.models.expense import Expense
@@ -19,31 +18,31 @@ class TestBudgetView(AbstractBudgetView):
 
 
 class TestExpenseView(AbstractExpenseView):
-        def add(self, exp, cat_name): pass
-        def update(self, exp, cat_name): pass
-        def delete(self, pk): pass
-        def add_category(self, cat): pass
-        def update_category(self, cat): pass
-        def delete_category(self, pk): pass
+    def add(self, exp, cat_name): pass
+    def update(self, exp, cat_name): pass
+    def delete(self, pk): pass
+    def add_category(self, cat): pass
+    def update_category(self, cat): pass
+    def delete_category(self, pk): pass
 
 
 class TestCategoryView(AbstractCategoryView):
-        added_cats = []
-        updated_cats = []
-        deleted_cats = []
-        warnings = []
+    added_cats = []
+    updated_cats = []
+    deleted_cats = []
+    warnings = []
 
-        def add(self, cat):
-            self.added_cats.append(cat)
+    def add(self, cat):
+        self.added_cats.append(cat)
 
-        def update(self, cat):
-            self.updated_cats.append(cat)
+    def update(self, cat):
+        self.updated_cats.append(cat)
 
-        def delete(self, pk):
-            self.deleted_cats.append(pk)
+    def delete(self, pk):
+        self.deleted_cats.append(pk)
 
-        def warning(self, msg):
-            self.warnings.append(msg)
+    def warning(self, msg):
+        self.warnings.append(msg)
 
 
 @pytest.fixture
@@ -68,12 +67,17 @@ def exp_repo():
 
 @pytest.fixture
 def bgt_presenter():
-    return BudgetPresenter(TestBudgetView(), MemoryRepository[Budget](), MemoryRepository[Expense]())
+    return BudgetPresenter(TestBudgetView(),
+                           MemoryRepository[Budget](),
+                           MemoryRepository[Expense]())
 
 
 @pytest.fixture
 def exp_presenter():
-    return ExpensePresenter(TestExpenseView(), MemoryRepository[Expense](), MemoryRepository[Category](), bgt_presenter)
+    return ExpensePresenter(TestExpenseView(),
+                            MemoryRepository[Expense](),
+                            MemoryRepository[Category](),
+                            bgt_presenter)
 
 
 def test_init(cat_view, cat_repo, exp_repo, exp_presenter):
@@ -98,7 +102,7 @@ def test_crud(cat_view, exp_view, cat_repo, exp_repo, bgt_presenter):
     exp_presenter = ExpensePresenter(exp_view, exp_repo, cat_repo, bgt_presenter)
     p = CategoryPresenter(cat_view, cat_repo, exp_repo, exp_presenter)
 
-    # Check adding    
+    # Check adding
     cat = Category('cat_1')
     p.add(cat)
     assert cat in cat_repo.get_all()

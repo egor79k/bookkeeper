@@ -25,14 +25,9 @@ Medicines
 Products
     Bakery
     Dairy products
-        Cheese
-        Eggs
-        Milk
     Fish
     Fruits
     Meat
-        Meat products
-        Raw meat
     Preserves
     Seafood
     Sweets
@@ -50,14 +45,24 @@ def get_cat_pk(name: str) -> int:
 
 
 exps_data = (
-    (80, 'Medicines', timedelta(days=2), 'Ascorbic acid'),
-    (350, 'Medicines', timedelta(days=2), 'Headache pills'),
-    (978, 'Alcohol', timedelta(hours=12), 'Payment at the bar'),
-    (199, 'Clothes', timedelta(days=1), 'Bought a new shirt'),
-    (1380, 'Books', timedelta(days=1), 'Russian-Chinese dictionary'),
-    (450, 'Raw meat', timedelta(0), 'Beef'),
-    (199, 'Meat products', timedelta(0), 'Meatballs for dinner'),
-    (73,  'Sweets', timedelta(0), 'Chocolate'),
+    (2600, 'Clothes',     timedelta(days=45),  ''),
+    (1450, 'Seafood',     timedelta(days=43),  'Sushi'),
+    (8999, 'Electronics', timedelta(days=40),  'New wireless headphones'),
+    (33,   'Tea',         timedelta(days=8),   ''),
+    (2440, 'Stationery',  timedelta(days=7),   ''),
+    (239,  'Fruits',      timedelta(days=4),   'Apples'),
+    (37,   'Sweets',      timedelta(days=4),   'Chewing gum'),
+    (110,  'Bakery',      timedelta(days=4),   'Donuts'),
+    (95,   'Preserves',   timedelta(days=4),   'Green pea'),
+    (239,  'Fish',        timedelta(days=4),   'Cod fillet'),
+    (80,   'Medicines',   timedelta(days=2),   'Ascorbic acid'),
+    (350,  'Medicines',   timedelta(days=2),   'Headache pills'),
+    (978,  'Alcohol',     timedelta(hours=36), 'Payment at the bar'),
+    (199,  'Clothes',     timedelta(days=1),   'Bought a new shirt'),
+    (1380, 'Books',       timedelta(days=1),   'Russian-Chinese dictionary'),
+    (450,  'Meat',        timedelta(0),        'Beef'),
+    (199,  'Meat',        timedelta(0),        'Meatballs for dinner'),
+    (73,   'Sweets',      timedelta(0),        'Chocolate'),
 )
 
 # Add expenses to database

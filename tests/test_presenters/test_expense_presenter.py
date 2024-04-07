@@ -1,15 +1,12 @@
 import pytest
-from datetime import datetime, timedelta
 from bookkeeper.repository.memory_repository import MemoryRepository
 from bookkeeper.models.budget import Budget
 from bookkeeper.models.expense import Expense
 from bookkeeper.models.category import Category
 from bookkeeper.view.abstract_budget_view import AbstractBudgetView
 from bookkeeper.view.abstract_expense_view import AbstractExpenseView
-from bookkeeper.view.abstract_category_view import AbstractCategoryView
 from bookkeeper.presenters.budget_presenter import BudgetPresenter
 from bookkeeper.presenters.expense_presenter import ExpensePresenter
-from bookkeeper.presenters.category_presenter import CategoryPresenter
 
 
 class TestBudgetView(AbstractBudgetView):
@@ -19,30 +16,30 @@ class TestBudgetView(AbstractBudgetView):
 
 
 class TestExpenseView(AbstractExpenseView):
-        added_exps = []
-        updated_exps = []
-        deleted_exps = []
-        added_cats = []
-        updated_cats = []
-        deleted_cats = []
-        
-        def add(self, exp, cat_name):
-            self.added_exps.append(exp)
+    added_exps = []
+    updated_exps = []
+    deleted_exps = []
+    added_cats = []
+    updated_cats = []
+    deleted_cats = []
 
-        def update(self, exp, cat_name):
-            self.updated_exps.append(exp)
+    def add(self, exp, cat_name):
+        self.added_exps.append(exp)
 
-        def delete(self, pk):
-            self.deleted_exps.append(pk)
+    def update(self, exp, cat_name):
+        self.updated_exps.append(exp)
 
-        def add_category(self, cat):
-            self.added_cats.append(cat)
+    def delete(self, pk):
+        self.deleted_exps.append(pk)
 
-        def update_category(self, cat):
-            self.updated_cats.append(cat)
+    def add_category(self, cat):
+        self.added_cats.append(cat)
 
-        def delete_category(self, pk):
-            self.deleted_cats.append(pk)
+    def update_category(self, cat):
+        self.updated_cats.append(cat)
+
+    def delete_category(self, pk):
+        self.deleted_cats.append(pk)
 
 
 @pytest.fixture
@@ -62,7 +59,9 @@ def cat_repo():
 
 @pytest.fixture
 def bgt_presenter():
-    return BudgetPresenter(TestBudgetView(), MemoryRepository[Budget](), MemoryRepository[Expense]())
+    return BudgetPresenter(TestBudgetView(),
+                           MemoryRepository[Budget](),
+                           MemoryRepository[Expense]())
 
 
 def test_init(exp_view, exp_repo, cat_repo, bgt_presenter):
@@ -136,7 +135,7 @@ def test_crud(exp_view, exp_repo, cat_repo, bgt_presenter):
 
     # Check deleting
     p.delete(exp.pk)
-    assert exp_repo.get(exp.pk) == None
+    assert exp_repo.get(exp.pk) is None
     assert exp.pk in exp_view.deleted_exps
 
 

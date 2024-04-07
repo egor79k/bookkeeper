@@ -39,7 +39,9 @@ def exp_repo():
 
 @pytest.fixture
 def bgt_presenter():
-    return BudgetPresenter(TestBudgetView(), MemoryRepository[Budget](), MemoryRepository[Expense]())
+    return BudgetPresenter(TestBudgetView(),
+                           MemoryRepository[Budget](),
+                           MemoryRepository[Expense]())
 
 
 def test_init(bgt_view, bgt_repo, exp_repo):
@@ -66,7 +68,7 @@ def test_calculate_all_1(bgt_view, bgt_repo, exp_repo):
     exp_repo.add(Expense(1, 0, datetime.now()))
     exp_repo.add(Expense(10, 0, datetime.now()))
     exp_repo.add(Expense(100, 0, datetime.now()))
-    
+
     # Add budgets
     bgts = [
         Budget(0, 100, 'day'),
@@ -78,7 +80,7 @@ def test_calculate_all_1(bgt_view, bgt_repo, exp_repo):
 
     p = BudgetPresenter(bgt_view, bgt_repo, exp_repo)
     p.calculate_all()
-    
+
     # Check total sums
     assert 111 == bgt_repo.get(bgts[0].pk).amount
     assert 111 == bgt_repo.get(bgts[1].pk).amount
@@ -91,7 +93,7 @@ def test_calculate_all_2(bgt_view, bgt_repo, exp_repo):
     exp_repo.add(Expense(10, 0, datetime.now()))
     exp_repo.add(Expense(100, 0, datetime.now() - timedelta(days=1)))
     exp_repo.add(Expense(1000, 0, datetime.now() - timedelta(days=10)))
-    
+
     # Add budgets
     bgts = [
         Budget(0, 100, 'day'),
@@ -102,7 +104,7 @@ def test_calculate_all_2(bgt_view, bgt_repo, exp_repo):
 
     p = BudgetPresenter(bgt_view, bgt_repo, exp_repo)
     p.calculate_all()
-    
+
     # Check total sums
     assert 11 == bgt_repo.get(bgts[0].pk).amount
     assert 11 == bgt_repo.get(bgts[1].pk).amount
@@ -114,7 +116,7 @@ def test_calculate_all_3(bgt_view, bgt_repo, exp_repo):
     exp_repo.add(Expense(10, 0, datetime.now()))
     exp_repo.add(Expense(100, 0, datetime.now() - timedelta(days=8)))
     exp_repo.add(Expense(1000, 0, datetime.now() - timedelta(days=100)))
-    
+
     # Add budgets
     bgts = [
         Budget(0, 100, 'week'),
@@ -125,7 +127,7 @@ def test_calculate_all_3(bgt_view, bgt_repo, exp_repo):
 
     p = BudgetPresenter(bgt_view, bgt_repo, exp_repo)
     p.calculate_all()
-    
+
     # Check total sums
     assert 11 == bgt_repo.get(bgts[0].pk).amount
     assert 11 == bgt_repo.get(bgts[1].pk).amount
@@ -137,7 +139,7 @@ def test_calculate_all_4(bgt_view, bgt_repo, exp_repo):
     exp_repo.add(Expense(10, 0, datetime.now()))
     exp_repo.add(Expense(100, 0, datetime.now() - timedelta(days=32)))
     exp_repo.add(Expense(1000, 0, datetime.now() - timedelta(days=1000)))
-    
+
     # Add budgets
     bgts = [
         Budget(0, 100, 'month'),
@@ -148,7 +150,7 @@ def test_calculate_all_4(bgt_view, bgt_repo, exp_repo):
 
     p = BudgetPresenter(bgt_view, bgt_repo, exp_repo)
     p.calculate_all()
-    
+
     # Check total sums
     assert 11 == bgt_repo.get(bgts[0].pk).amount
     assert 11 == bgt_repo.get(bgts[1].pk).amount
