@@ -42,4 +42,3 @@ class CategoryPresenter:
             self.exp_presenter.delete_category(pk)
         else:
             self.cat_view.warning("Unable to remove category. There are expense(s) of this category.")
-            print(f"Unable to remove category. There are expense(s) of this category.")
