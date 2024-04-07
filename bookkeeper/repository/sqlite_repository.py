@@ -15,7 +15,8 @@ class SQLiteRepository(AbstractRepository[T]):
         self._cursor = self._connection.cursor()
 
         if not hasattr(cls_type, 'pk'):
-            raise ValueError("Trying to create SQLiteRepository over class without 'pk' field")
+            raise ValueError(
+                "Trying to create SQLiteRepository over class without 'pk' field")
 
         self._cls_type = cls_type
         self._table_name = cls_type.__name__.lower()
@@ -23,7 +24,8 @@ class SQLiteRepository(AbstractRepository[T]):
         self._attributes.remove('pk')
 
         if len(self._attributes) < 1:
-            raise ValueError("Trying to create SQLiteRepository over class with only 'pk' field")
+            raise ValueError(
+                "Trying to create SQLiteRepository over class with only 'pk' field")
 
         annot_type_to_sql = {
             int: 'INTEGER',
@@ -69,7 +71,6 @@ class SQLiteRepository(AbstractRepository[T]):
             setattr(obj, attr, val)
         return obj
 
-
     def add(self, obj: T) -> Any:
         """
         Add object to repository, return object id
@@ -98,7 +99,6 @@ class SQLiteRepository(AbstractRepository[T]):
 
         return pk
 
-
     def get(self, pk: int) -> T | None:
         """
         Get object by id.
@@ -111,7 +111,6 @@ class SQLiteRepository(AbstractRepository[T]):
         """
         self._cursor.execute(f'SELECT * FROM {self._table_name} WHERE pk == ?', (pk,))
         return self.tuple_to_object(self._cursor.fetchone())
-
 
     def get_all(self, where: dict[str, Any] | None = None) -> list[T]:
         """
@@ -129,10 +128,10 @@ class SQLiteRepository(AbstractRepository[T]):
         else:
             conditions = ', '.join(['"' + field + '"' + ' == ?' for field in where])
             values = list(where.values())
-            self._cursor.execute(f'SELECT * FROM {self._table_name} WHERE {conditions}', values)
+            self._cursor.execute(
+                f'SELECT * FROM {self._table_name} WHERE {conditions}', values)
 
         return [self.tuple_to_object(t) for t in self._cursor.fetchall()]
-
 
     def update(self, obj: T) -> None:
         """
@@ -147,9 +146,9 @@ class SQLiteRepository(AbstractRepository[T]):
         fields = ', '.join(['"' + attr + '"' + ' = ?' for attr in self._attributes])
         values = [getattr(obj, attr) for attr in self._attributes]
         values.append(obj.pk)
-        self._cursor.execute(f'UPDATE {self._table_name} SET {fields} WHERE pk = ?', values)
+        self._cursor.execute(
+            f'UPDATE {self._table_name} SET {fields} WHERE pk = ?', values)
         self._connection.commit()
-
 
     def delete(self, pk: int) -> None:
         """

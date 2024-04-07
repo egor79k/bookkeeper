@@ -24,7 +24,6 @@ class AbstractBudgetView(ABC):
         """
         self.bgt_presenter = bgt_presenter
 
-
     @abstractmethod
     def add(self, bgt: Budget) -> None:
         """
@@ -34,7 +33,6 @@ class AbstractBudgetView(ABC):
             bgt - Budget object from database
         """
 
-
     @abstractmethod
     def update(self, bgt: Budget) -> None:
         """
@@ -43,7 +41,6 @@ class AbstractBudgetView(ABC):
         Parameters:
             bgt - Budget object from database
         """
-
 
     @abstractmethod
     def handle_exceeding(self, bgts: list[Budget]) -> None:

@@ -62,7 +62,6 @@ class ExpenseView(AbstractExpenseView):
         delete_button.clicked.connect(self.on_delete_button_clicked)
         self.table.cellChanged.connect(self.on_table_cell_changed)
 
-
     def get_layout(self) -> QtWidgets.QLayout:
         """
         Get layout to insert expenses widgets into window
@@ -71,7 +70,6 @@ class ExpenseView(AbstractExpenseView):
             QLayout object containing expense UI
         """
         return self.vbox_layout
-
 
     def add(self, exp: Expense, cat_name: str) -> None:
         """
@@ -88,14 +86,13 @@ class ExpenseView(AbstractExpenseView):
         self.table.blockSignals(True)
         self.table.insertRow(0)
         date_str = exp.expense_date.strftime('%Y-%m-%d %H:%M')
-        self.table.setItem(0, 0,QtWidgets.QTableWidgetItem(date_str))
+        self.table.setItem(0, 0, QtWidgets.QTableWidgetItem(date_str))
         self.table.setItem(0, 1, QtWidgets.QTableWidgetItem(str(exp.amount)))
         cat_item = QtWidgets.QTableWidgetItem(cat_name)
         cat_item.setFlags(QtCore.Qt.ItemIsEnabled)
         self.table.setItem(0, 2, cat_item)
         self.table.setItem(0, 3, QtWidgets.QTableWidgetItem(exp.comment))
         self.table.blockSignals(False)
-
 
     def update(self, exp: Expense, cat_name: str) -> None:
         """
@@ -111,7 +108,6 @@ class ExpenseView(AbstractExpenseView):
         self.table.item(row, 2).setText(cat_name)
         self.table.item(row, 3).setText(exp.comment)
 
-
     def delete(self, pk: int) -> None:
         """
         Deletes expense from table.
@@ -123,7 +119,6 @@ class ExpenseView(AbstractExpenseView):
         self.exp_row2pk.pop(row)
         self.table.removeRow(row)
 
-
     def add_category(self, cat: Category) -> None:
         """
         Adds new category to combo box.
@@ -133,7 +128,6 @@ class ExpenseView(AbstractExpenseView):
         """
         self.cat_id2pk.append(cat.pk)
         self.category_input.addItem(cat.name)
-
 
     def update_category(self, cat: Category) -> None:
         """
@@ -145,7 +139,6 @@ class ExpenseView(AbstractExpenseView):
         index = self.cat_id2pk.index(cat.pk)
         self.category_input.setItemText(index, cat.name)
 
-
     def delete_category(self, pk: int) -> None:
         """
         Deletes category from combo box by its pk.
@@ -156,7 +149,6 @@ class ExpenseView(AbstractExpenseView):
         index = self.cat_id2pk.index(pk)
         self.cat_id2pk.pop(index)
         self.category_input.removeItem(index)
-
 
     @QtCore.Slot()
     def on_table_cell_changed(self, row: int, _: int) -> None:
@@ -196,7 +188,6 @@ class ExpenseView(AbstractExpenseView):
         exp = Expense(amount, expense_date=date, comment=comment, pk=pk)
         self.exp_presenter.update(exp, restore)
 
-
     @QtCore.Slot()
     def on_add_button_clicked(self) -> None:
         """
@@ -213,7 +204,6 @@ class ExpenseView(AbstractExpenseView):
         cat_pk = self.cat_id2pk[self.category_input.currentIndex()]
         exp = Expense(amount, cat_pk)
         self.exp_presenter.add(exp)
-
 
     @QtCore.Slot()
     def on_delete_button_clicked(self) -> None:

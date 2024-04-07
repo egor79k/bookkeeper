@@ -13,7 +13,8 @@ class Category:
 
     Attributes:
         name   - name of category
-        parent - link to a parent category (foreign key). For top level categories parent=None
+        parent - link to a parent category (foreign key).
+                 For top level categories parent=None
         pk     - id in database (primary key)
     """
 

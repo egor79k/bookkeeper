@@ -16,5 +16,5 @@ class Budget:
     """
     amount: int = 0
     limit: int = 0
-    period: str = 'month' # Allowed values: 'day', 'week', 'month'
+    period: str = 'month'  # Allowed values: 'day', 'week', 'month'
     pk: int = 0

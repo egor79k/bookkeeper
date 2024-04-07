@@ -28,7 +28,6 @@ class BudgetPresenter:
 
         self.calculate_all()
 
-
     def calculate_one(self, bgt: Budget, exps: list[Expense]) -> None:
         """
         Calculate sum of expenses in budget's period.
@@ -42,17 +41,17 @@ class BudgetPresenter:
             period = (datetime(curr_dt.year, curr_dt.month, curr_dt.day), curr_dt)
         elif 'week' == bgt.period:
             period = (datetime(curr_dt.year, curr_dt.month, curr_dt.day) -
-                timedelta(days=datetime.weekday(datetime.now())), curr_dt)
+                      timedelta(days=datetime.weekday(datetime.now())), curr_dt)
         elif 'month' == bgt.period:
             period = (datetime(curr_dt.year, curr_dt.month, 1), curr_dt)
         else:
-            raise ValueError(f"Trying to calculate budget for unsupported period '{bgt.period}'")
+            raise ValueError(
+                f"Trying to calculate budget for unsupported period '{bgt.period}'")
 
         bgt.amount = 0
         for exp in exps:
             if exp.expense_date >= period[0] and exp.expense_date <= period[1]:
                 bgt.amount += exp.amount
-
 
     def calculate_all(self) -> None:
         """
@@ -72,7 +71,6 @@ class BudgetPresenter:
 
         if len(exceeding) > 0:
             self.bgt_view.handle_exceeding(exceeding)
-
 
     def update(self, bgt: Budget, restore: bool = False) -> None:
         """

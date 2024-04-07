@@ -24,7 +24,6 @@ class AbstractCategoryView(ABC):
         """
         self.cat_presenter = cat_presenter
 
-
     @abstractmethod
     def add(self, cat: Category) -> None:
         """
@@ -33,7 +32,6 @@ class AbstractCategoryView(ABC):
         Parameters:
             cat - Category object from database
         """
-
 
     @abstractmethod
     def update(self, cat: Category) -> None:
@@ -44,7 +42,6 @@ class AbstractCategoryView(ABC):
             cat - Category object from database
         """
 
-
     @abstractmethod
     def delete(self, pk: int) -> None:
         """
@@ -53,7 +50,6 @@ class AbstractCategoryView(ABC):
         Parameters:
             pk - id of Category object in database (primary key)
         """
-
 
     @abstractmethod
     def warning(self, msg: str) -> None:

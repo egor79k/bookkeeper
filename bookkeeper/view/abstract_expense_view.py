@@ -25,7 +25,6 @@ class AbstractExpenseView(ABC):
         """
         self.exp_presenter = exp_presenter
 
-
     @abstractmethod
     def add(self, exp: Expense, cat_name: str) -> None:
         """
@@ -35,7 +34,6 @@ class AbstractExpenseView(ABC):
             exp      - Expense object from database
             cat_name - Category name according to category pk in exp
         """
-
 
     @abstractmethod
     def update(self, exp: Expense, cat_name: str) -> None:
@@ -47,7 +45,6 @@ class AbstractExpenseView(ABC):
             cat_name - Category name according to category pk in exp
         """
 
-
     @abstractmethod
     def delete(self, pk: int) -> None:
         """
@@ -56,7 +53,6 @@ class AbstractExpenseView(ABC):
         Parameters:
             pk - id of Expense object in database (primary key)
         """
-
 
     @abstractmethod
     def add_category(self, cat: Category) -> None:
@@ -67,7 +63,6 @@ class AbstractExpenseView(ABC):
             cat - Category object from database
         """
 
-
     @abstractmethod
     def update_category(self, cat: Category) -> None:
         """
@@ -76,7 +71,6 @@ class AbstractExpenseView(ABC):
         Parameters:
             cat - Category object from database
         """
-
 
     @abstractmethod
     def delete_category(self, pk: int) -> None:

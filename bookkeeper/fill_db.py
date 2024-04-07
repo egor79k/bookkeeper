@@ -43,9 +43,11 @@ Stationery
 
 Category.create_from_tree(read_tree(cats), cat_repo)
 
+
 def get_cat_pk(name: str) -> int:
     ''' Returns category pk by name '''
     return cat_repo.get_all({'name': name})[0].pk
+
 
 exps_data = (
     (80, 'Medicines', timedelta(days=2), 'Ascorbic acid'),

@@ -28,7 +28,6 @@ class CategoryPresenter:
             self.cat_view.add(cat)
             self.exp_presenter.add_category(cat)
 
-
     def add(self, cat: Category) -> None:
         """
         Adds new category to repository and view and informs expense presenter.
@@ -40,7 +39,6 @@ class CategoryPresenter:
         self.cat_repo.add(cat)
         self.cat_view.add(cat)
         self.exp_presenter.add_category(cat)
-
 
     def update(self, cat: Category) -> None:
         """
@@ -56,7 +54,6 @@ class CategoryPresenter:
         exps_with_cat = self.exp_repo.get_all({'category': cat.pk})
         for exp in exps_with_cat:
             self.exp_presenter.update(exp)
-
 
     def delete(self, pk: int) -> None:
         """

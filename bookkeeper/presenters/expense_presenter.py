@@ -32,7 +32,6 @@ class ExpensePresenter:
                 raise ValueError(f'Unknown category with pk {exp.category}')
             self.exp_view.add(exp, cat.name)
 
-
     def add(self, exp: Expense) -> None:
         """
         Adds new expense to repository and view
@@ -48,7 +47,6 @@ class ExpensePresenter:
             raise ValueError(f'Unknown category with pk {exp.category}')
         self.exp_view.add(exp, cat.name)
         self.bgt_presenter.calculate_all()
-
 
     def update(self, exp: Expense, restore: bool = False) -> None:
         """
@@ -78,7 +76,6 @@ class ExpensePresenter:
 
         self.exp_view.update(exp, cat.name)
 
-
     def delete(self, pk: int) -> None:
         """
         Deletes expense operation by id from repository and view
@@ -91,7 +88,6 @@ class ExpensePresenter:
         self.exp_view.delete(pk)
         self.bgt_presenter.calculate_all()
 
-
     def add_category(self, cat: Category) -> None:
         """
         Adds new category to expense view.
@@ -102,7 +98,6 @@ class ExpensePresenter:
         """
         self.exp_view.add_category(cat)
 
-
     def update_category(self, cat: Category) -> None:
         """
         Updates category in expense view.
@@ -112,7 +107,6 @@ class ExpensePresenter:
             cat - Category object from database
         """
         self.exp_view.update_category(cat)
-
 
     def delete_category(self, pk: int) -> None:
         """

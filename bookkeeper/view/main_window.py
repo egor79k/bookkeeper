@@ -9,7 +9,10 @@ from bookkeeper.view.category_view import CategoryView
 
 class MainWindow(QtWidgets.QMainWindow):  # pylint: disable=too-few-public-methods
     """ Class uniting category, expense and budget views in one window """
-    def __init__(self, cat_view: CategoryView, exp_view: ExpenseView, bgt_view: BudgetView) -> None:
+    def __init__(self,
+                 cat_view: CategoryView,
+                 exp_view: ExpenseView,
+                 bgt_view: BudgetView) -> None:
         super().__init__()
         self.setWindowTitle('Bookkeeper')
         self.resize(800, 600)

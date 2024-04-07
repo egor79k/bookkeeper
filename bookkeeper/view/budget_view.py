@@ -44,7 +44,6 @@ class BudgetView(AbstractBudgetView):
         # Connect signals to slots
         self.table.cellChanged.connect(self.on_table_cell_changed)
 
-
     def get_layout(self) -> QtWidgets.QLayout:
         """
         Get layout to insert budgets widgets into window
@@ -53,7 +52,6 @@ class BudgetView(AbstractBudgetView):
             QLayout object containing expense UI
         """
         return self.vbox_layout
-
 
     def add(self, bgt: Budget) -> None:
         """
@@ -75,7 +73,6 @@ class BudgetView(AbstractBudgetView):
         self.table.setItem(0, 1, QtWidgets.QTableWidgetItem(str(bgt.limit)))
         self.table.blockSignals(False)
 
-
     def update(self, bgt: Budget) -> None:
         """
         Updates an existing budget data in the table.
@@ -93,7 +90,6 @@ class BudgetView(AbstractBudgetView):
         item.setText(str(bgt.limit))
         item.setData(QtCore.Qt.BackgroundRole, None)
         self.table.blockSignals(False)
-
 
     def handle_exceeding(self, bgts: list[Budget]) -> None:
         """
@@ -115,7 +111,6 @@ class BudgetView(AbstractBudgetView):
         periods = [bgt.period for bgt in bgts]
         msg_box.setText("Budget was exceeded for " + ", ".join(periods))
         msg_box.exec()
-
 
     @QtCore.Slot()
     def on_table_cell_changed(self, row: int, _: int) -> None:

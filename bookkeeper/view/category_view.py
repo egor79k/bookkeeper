@@ -55,7 +55,6 @@ class CategoryView(AbstractCategoryView):
         add_button.clicked.connect(self.on_add_button_clicked)
         delete_button.clicked.connect(self.on_delete_button_clicked)
 
-
     def get_layout(self) -> QtWidgets.QLayout:
         """
         Get layout to insert categories widgets into window
@@ -64,7 +63,6 @@ class CategoryView(AbstractCategoryView):
             QLayout object containing category UI
         """
         return self.vbox_layout
-
 
     def add(self, cat: Category) -> None:
         """
@@ -81,7 +79,6 @@ class CategoryView(AbstractCategoryView):
         item.setText(0, cat.name)
         self.tree.addTopLevelItem(item)
 
-
     def update(self, cat: Category) -> None:
         """
         Updates an existing category data in the tree.
@@ -90,7 +87,6 @@ class CategoryView(AbstractCategoryView):
             cat - Category object from database
         """
         self.current_editable_item.setText(0, cat.name)
-
 
     def delete(self, pk: int) -> None:
         """
@@ -102,7 +98,6 @@ class CategoryView(AbstractCategoryView):
         row = self.row2pk.index(pk)
         self.row2pk.pop(row)
         self.tree.takeTopLevelItem(row)
-
 
     def warning(self, msg: str) -> None:
         """
@@ -117,9 +112,10 @@ class CategoryView(AbstractCategoryView):
         msg_box.setText(msg)
         msg_box.exec()
 
-
     @QtCore.Slot()
-    def on_item_double_clicked(self, item: QtWidgets.QTreeWidgetItem, column: int) -> None:
+    def on_item_double_clicked(self,
+                               item: QtWidgets.QTreeWidgetItem,
+                               column: int) -> None:
         """
         Handles start of editing category on double click.
 
@@ -130,7 +126,6 @@ class CategoryView(AbstractCategoryView):
         self.edit_name_input.setEnabled(True)
         self.edit_name_input.setText(item.text(column))
         self.current_editable_item = item
-
 
     @QtCore.Slot()
     def on_edit_name_input_return_pressed(self) -> None:
@@ -144,7 +139,6 @@ class CategoryView(AbstractCategoryView):
         pk = self.row2pk[row]
         self.cat_presenter.update(Category(name=new_name, parent=None, pk=pk))
 
-
     @QtCore.Slot()
     def on_add_button_clicked(self) -> None:
         """
@@ -155,7 +149,6 @@ class CategoryView(AbstractCategoryView):
         self.name_input.clear()
         cat = Category(name)
         self.cat_presenter.add(cat)
-
 
     @QtCore.Slot()
     def on_delete_button_clicked(self) -> None:
@@ -171,4 +164,3 @@ class CategoryView(AbstractCategoryView):
         row = self.tree.indexOfTopLevelItem(items[0])
         pk = self.row2pk[row]
         self.cat_presenter.delete(pk)
-        
