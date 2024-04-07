@@ -7,7 +7,7 @@ from bookkeeper.models.category import Category
 
 class AbstractCategoryView(ABC):
     """
-    Abstract base class for categories list view
+    Abstract base class for categories list view.
 
     Attributes:
         cat_presenter - CategoryPresenter object implementing logic
@@ -17,7 +17,7 @@ class AbstractCategoryView(ABC):
 
     def set_presenter(self, cat_presenter) -> None:
         """
-        Sets presenter object for this view
+        Sets presenter object for this view.
 
         Parameters:
             cat_presenter - CategoryPresenter object
@@ -28,7 +28,7 @@ class AbstractCategoryView(ABC):
     @abstractmethod
     def add(self, cat: Category) -> None:
         """
-        Adds new category to view
+        Adds new category to view.
 
         Parameters:
             cat - Category object from database

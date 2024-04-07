@@ -32,7 +32,8 @@ class AbstractExpenseView(ABC):
         Adds new expense to view.
 
         Parameters:
-            exp - Expense object from database
+            exp      - Expense object from database
+            cat_name - Category name according to category pk in exp
         """
 
 
@@ -43,6 +44,7 @@ class AbstractExpenseView(ABC):
 
         Parameters:
             exp - Expense object from database
+            cat_name - Category name according to category pk in exp
         """
 
 

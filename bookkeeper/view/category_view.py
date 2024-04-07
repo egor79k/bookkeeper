@@ -9,16 +9,19 @@ from bookkeeper.view.abstract_category_view import AbstractCategoryView
 
 class CategoryView(AbstractCategoryView):
     """
-    This class implements a GUI for categories list,allowing user
+    This class implements a GUI for categories list, allowing user
     to create, list, update and delete categories from database.
     It is a part of MVP architecture so it handles link to category presenter.
     Therefore set_presenter() method of abstract base class must be called
     before calling any other methods.
     All user actions are passed to presenter and don't cause any changes
-    in UI directly. Presenter calls back to this viewto display changes
+    in UI directly. Presenter calls back to this view to display changes
     in UI after doing necessary logic.
     Categories list is stored in the tree widget to provide a future support
     for subcategories which is not implemented yet.
+
+    Attributes:
+        row2pk - list matching category's row in tree to it's pk in database
     """
 
     row2pk: list[int]
@@ -40,12 +43,10 @@ class CategoryView(AbstractCategoryView):
         self.edit_name_input = QtWidgets.QLineEdit()
         self.edit_name_input.setEnabled(False)
         self.name_input = QtWidgets.QLineEdit()
-        # self.parent_input = QtWidgets.QComboBox()
         delete_button = QtWidgets.QPushButton('Delete')
         add_button = QtWidgets.QPushButton('Add')
         form_layout.addRow(QtWidgets.QLabel('Edit'), self.edit_name_input)
         form_layout.addRow(QtWidgets.QLabel('Name'), self.name_input)
-        # form_layout.addRow(QtWidgets.QLabel('Parent'), self.parent_input)
         form_layout.addRow(delete_button, add_button)
 
         # Connect slots to signals
@@ -57,7 +58,7 @@ class CategoryView(AbstractCategoryView):
 
     def get_layout(self) -> QtWidgets.QLayout:
         """
-        Get layout to insert category widgets into window
+        Get layout to insert categories widgets into window
 
         Returns:
             QLayout object containing category UI
@@ -125,7 +126,6 @@ class CategoryView(AbstractCategoryView):
         Parameters:
             item   - tree item being modified
             column - column of item being modified (only one now)
-
         """
         self.edit_name_input.setEnabled(True)
         self.edit_name_input.setText(item.text(column))
@@ -136,7 +136,6 @@ class CategoryView(AbstractCategoryView):
     def on_edit_name_input_return_pressed(self) -> None:
         """
         Handles finish of editing category on pressing enter in the edit line.
-
         """
         new_name = self.edit_name_input.text()
         self.edit_name_input.clear()
@@ -150,8 +149,7 @@ class CategoryView(AbstractCategoryView):
     def on_add_button_clicked(self) -> None:
         """
         Handles click on add button passing new category to presenter.
-        Does not change view. (All changes in UI are caused by the presenter).
-
+        Does not change view. All changes in UI are caused by the presenter.
         """
         name = self.name_input.text()
         self.name_input.clear()
@@ -164,7 +162,7 @@ class CategoryView(AbstractCategoryView):
         """
         Handles click on delete button passing pk of the category being deleted
         to the presenter.
-
+        Does not change view. All changes in UI are caused by the presenter.
         """
         items = self.tree.selectedItems()
         if len(items) == 0:
