@@ -169,7 +169,6 @@ class ExpenseView(AbstractExpenseView):
             val = self.table.item(row, 0).text()
             date = datetime.fromisoformat(val)
         except ValueError:
-            print(f"Unsupported date format: '{val}'")
             date = datetime.now()
             restore = True
 
@@ -178,7 +177,6 @@ class ExpenseView(AbstractExpenseView):
             val = self.table.item(row, 1).text()
             amount = int(val)
         except ValueError:
-            print(f"Unsupported amount format: '{val}'")
             amount = 0
             restore = True
 

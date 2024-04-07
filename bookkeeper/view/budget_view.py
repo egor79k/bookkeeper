@@ -139,7 +139,6 @@ class BudgetView(AbstractBudgetView):
             val = self.table.item(row, 1).text()
             bgt.limit = int(val)
         except ValueError:
-            print(f"Unsupported limit format: '{val}'")
             bgt.limit = 0
             restore = True
 

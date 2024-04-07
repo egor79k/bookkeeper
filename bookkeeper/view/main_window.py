@@ -29,7 +29,7 @@ class MainWindow(QtWidgets.QMainWindow):  # pylint: disable=too-few-public-metho
         horizontal_layout.addLayout(self.cat_view.get_layout())
 
         self.exp_view = exp_view
-        vertical_layout.addLayout(self.exp_view.get_layout(), 11)
+        vertical_layout.addLayout(self.exp_view.get_layout(), 10)
 
         self.bgt_view = bgt_view
-        vertical_layout.addLayout(self.bgt_view.get_layout(), 4)
+        vertical_layout.addLayout(self.bgt_view.get_layout(), 3)
